@@ -61,18 +61,30 @@
     };
 };
 
+&gpio0 {
+    status = "okay";
+};
+
+&gpio1 {
+    status = "okay";
+};
+
 / {
     chosen {
         zmk,underglow = &led_strip;
+        zmk,default-power-domain = &core_power_domain;
+    };
+
+    EXT_POWER {
+        compatible = "zmk,ext-power-generic";
+        control-gpios = <&gpio1 14 GPIO_ACTIVE_LOW>;
     };
 
     core_power_domain: core_power_domain {
-        // The "power-domain" compatible is needed for any PDs used for that have dynamic deps,
-        // e.g. for displays or RGB not assigned to the PD in the devicetree statically.
         compatible = "power-domain-gpio", "power-domain";
-        startup-delay-us = <2000>;
-        off-on-delay-us = <2000>;
-        enable-gpios = <&xiao_d 9 GPIO_ACTIVE_LOW>;
+        startup-delay-us = <50000>;
+        off-on-delay-us = <50000>;
+        enable-gpios = <&gpio1 14 GPIO_ACTIVE_LOW>;
         zephyr,pm-device-runtime-auto;
     };
 };
