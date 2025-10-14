@@ -1,0 +1,15 @@
+file_format: "1"
+id: clickety_split_mnml
+name: MNML v2.13
+url: https://clicketysplit.ca
+type: board
+arch: arm
+features:
+  - keys
+  - display
+outputs:
+  - ble
+  - usb
+siblings:
+  - clickety_split_mnml_left
+  - clickety_split_mnml_right
