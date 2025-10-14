@@ -1,0 +1,8 @@
+# Chiisai v1.13 board configuration
+
+# Copyright (c) 2025 Clickety Split Ltd.
+# SPDX-License-Identifier: MIT
+
+config BOARD_CLICKETY_SPLIT_CHIISAI
+    bool "Clickety Split Chiisai"
+    depends on SOC_NRF52840_QIAA

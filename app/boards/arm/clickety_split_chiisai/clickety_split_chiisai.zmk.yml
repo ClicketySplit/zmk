@@ -1,0 +1,10 @@
+file_format: "1"
+id: clickety_split_chiisai
+name: Chiisai v1.13
+type: board
+arch: arm
+outputs:
+  - ble
+  - usb
+url: https://clicketysplit.ca
+exposes: [pro_micro]

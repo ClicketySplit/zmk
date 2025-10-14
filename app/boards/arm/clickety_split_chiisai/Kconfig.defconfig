@@ -1,0 +1,19 @@
+# Copyright (c) 2025 Clickety Split Ltd.
+# SPDX-License-Identifier: MIT
+
+if BOARD_CLICKETY_SPLIT_CHIISAI
+
+config BOARD
+    default "clickety_split_chiisai"
+
+config BT_CTLR
+    default BT
+
+if USB_DEVICE_STACK
+
+config USB_NRFX
+    default y
+
+endif # USB_DEVICE_STACK
+
+endif # BOARD_CLICKETY_SPLIT_CHIISAI
