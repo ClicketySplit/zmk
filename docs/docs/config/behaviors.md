@@ -104,7 +104,7 @@ You can use the following nodes to tweak the default behaviors:
 | Node  | Behavior                                              |
 | ----- | ----------------------------------------------------- |
 | `&lt` | [Layer-tap](../keymaps/behaviors/layers.md#layer-tap) |
-| `&mt` | [Mod-tap](../keymaps/behaviors/mod-tap.md)            |
+| `&mt` | [Mod-tap](../keymaps/behaviors/hold-tap.mdx#mod-tap)  |
 
 ## Key Repeat
 
@@ -154,6 +154,29 @@ You can use the following node to tweak the default behavior:
 | ----- | ------------------------------------------------ |
 | `&kt` | [Key toggle](../keymaps/behaviors/key-toggle.md) |
 
+## Momentary Layer
+
+Creates a custom behavior that toggles a layer on when pressed, and off when released.
+
+See the [momentary layer behavior](../keymaps/behaviors/layers.md#momentary-layer) documentation for more details and examples.
+
+### Devicetree
+
+Definition file: [zmk/app/dts/bindings/behaviors/zmk,behavior-momentary-layer.yaml](https://github.com/zmkfirmware/zmk/blob/main/app/dts/bindings/behaviors/zmk%2Cbehavior-momentary-layer.yaml)
+
+Applies to: `compatible = "zmk,behavior-momentary-layer"`
+
+| Property         | Type | Description                                                     | Default |
+| ---------------- | ---- | --------------------------------------------------------------- | ------- |
+| `#binding-cells` | int  | Must be `<1>`                                                   |         |
+| `locking`        | bool | Whether the behavior can lock and unlock layers in the on state | false   |
+
+You can use the following node to tweak the default behavior:
+
+| Node  | Behavior                                                          |
+| ----- | ----------------------------------------------------------------- |
+| `&mo` | [Momentary Layer](../keymaps/behaviors/layers.md#momentary-layer) |
+
 ## Layer Toggle
 
 Creates a custom behavior that toggles a layer on, off, or switches between the two states.
@@ -166,16 +189,40 @@ Definition file: [zmk/app/dts/bindings/behaviors/zmk,behavior-layer-toggle.yaml]
 
 Applies to: `compatible = "zmk,behavior-layer-toggle"`
 
-| Property         | Type | Description                    | Default |
-| ---------------- | ---- | ------------------------------ | ------- |
-| `#binding-cells` | int  | Must be `<1>`                  |         |
-| `toggle-mode`    |      | One of `on`, `off`, and `flip` | `flip`  |
+| Property         | Type | Description                                                     | Default |
+| ---------------- | ---- | --------------------------------------------------------------- | ------- |
+| `#binding-cells` | int  | Must be `<1>`                                                   |         |
+| `toggle-mode`    |      | One of `on`, `off`, and `flip`                                  | `flip`  |
+| `locking`        | bool | Whether the behavior can lock and unlock layers in the on state | false   |
 
 You can use the following node to tweak the default behavior:
 
 | Node   | Behavior                                                    |
 | ------ | ----------------------------------------------------------- |
 | `&tog` | [Layer toggle](../keymaps/behaviors/layers.md#toggle-layer) |
+
+## To Layer
+
+Creates a custom behavior that toggles a layer on and toggles all other layers off, barring the default layer.
+
+See the [to layer behavior](../keymaps/behaviors/layers.md#to-layer) documentation for more details and examples.
+
+### Devicetree
+
+Definition file: [zmk/app/dts/bindings/behaviors/zmk,behavior-to-layer.yaml](https://github.com/zmkfirmware/zmk/blob/main/app/dts/bindings/behaviors/zmk%2Cbehavior-to-layer.yaml)
+
+Applies to: `compatible = "zmk,behavior-to-layer"`
+
+| Property         | Type | Description                                                     | Default |
+| ---------------- | ---- | --------------------------------------------------------------- | ------- |
+| `#binding-cells` | int  | Must be `<1>`                                                   |         |
+| `locking`        | bool | Whether the behavior can lock and unlock layers in the on state | false   |
+
+You can use the following node to tweak the default behavior:
+
+| Node  | Behavior                                            |
+| ----- | --------------------------------------------------- |
+| `&to` | [To Layer](../keymaps/behaviors/layers.md#to-layer) |
 
 ## Macro
 
@@ -324,6 +371,12 @@ You can use the following nodes to tweak the default behaviors:
 Creates a custom behavior that triggers a different behavior corresponding to the number of times the key is tapped.
 
 See the [tap dance behavior](../keymaps/behaviors/tap-dance.mdx) documentation for more details and examples.
+
+### Kconfig
+
+| Config                                   | Type | Description                                    | Default |
+| ---------------------------------------- | ---- | ---------------------------------------------- | ------- |
+| `CONFIG_ZMK_BEHAVIOR_TAP_DANCE_MAX_HELD` | int  | Maximum number of simultaneous held tap-dances | 10      |
 
 ### Devicetree
 
