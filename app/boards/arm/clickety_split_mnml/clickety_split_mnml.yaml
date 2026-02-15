@@ -8,12 +8,10 @@ toolchain:
   - gnuarmemb
   - xtools
 supported:
-  - adc
-  - usb_device
-  - ble
-  - ieee802154
-  - pwm
-  - watchdog
   - gpio
-  - i2c
+  - ble
+  - usb_device
   - spi
+  - i2c
+  - adc
+  - watchdog
