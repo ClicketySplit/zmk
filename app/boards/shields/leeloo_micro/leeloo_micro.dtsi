@@ -7,7 +7,6 @@
 
 / {
     chosen {
-        zephyr,display = &oled;
         zmk,kscan = &kscan0;
         zmk,matrix-transform = &default_transform;
     };
@@ -67,6 +66,10 @@ RC(2,0) RC(2,1) RC(2,2) RC(2,3) RC(2,4) RC(3,4) RC(3,5) RC(2,5) RC(2,6) RC(2,7) 
 
 };
 
+/*
+ * Do not need this section:
+ * MIP display is defined in boards/clickety_split_chiisai.overlay
+ *
 &pro_micro_i2c {
     status = "okay";
 
@@ -86,3 +89,4 @@ RC(2,0) RC(2,1) RC(2,2) RC(2,3) RC(2,4) RC(3,4) RC(3,5) RC(2,5) RC(2,6) RC(2,7) 
         prechargep = <0x22>;
     };
 };
+*/
