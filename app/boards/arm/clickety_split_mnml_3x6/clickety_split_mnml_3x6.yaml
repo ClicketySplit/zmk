@@ -1,0 +1,17 @@
+identifier: clickety_split_mnml_3x6
+name: MNML v2.13
+url: https://clicketysplit.ca
+type: keyboard
+arch: arm
+toolchain:
+  - zephyr
+  - gnuarmemb
+  - xtools
+supported:
+  - gpio
+  - ble
+  - usb_device
+  - spi
+  - i2c
+  - adc
+  - watchdog

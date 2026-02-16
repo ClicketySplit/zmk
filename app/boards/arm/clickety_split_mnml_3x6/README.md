@@ -1,10 +1,10 @@
-# Clickety Split Ltd | MNML v2.13, 3x5 + 5M
+# Clickety Split Ltd | MNML v2.13, 3x6 + 5M
 
-MNML, pronounced Minimal, is a 40 switch wireless split keyboard with on-board Sharp memory-in-pixel displays (LS011B7DH03) and integrated LiPo charger.
+MNML, pronounced Minimal, is a 46 switch wireless split keyboard with on-board Sharp memory-in-pixel displays (LS011B7DH03) and integrated LiPo charger.
 
 Featuring:
 
-- 40 keys 3x5x5M
+- 46 keys 3x6x5M
 - Hot swappable Kailh Choc v1 Switches
 - nRF52840-CKAA Microcontroller
 - Integrated 1S LiPo Charger

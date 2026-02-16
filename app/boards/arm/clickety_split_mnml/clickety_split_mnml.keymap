@@ -77,13 +77,6 @@
             layers = <QX_M>;
             bindings = <&kp ESC>;
         };
-
-        combo_osx_lock {
-            timeout-ms = <50>;
-            key-positions = <26 18>;
-            layers = <QX_M>;
-            bindings = <&kp LC(LG(Q))>;
-        };
     };
 
     macros {

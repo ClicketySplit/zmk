@@ -1,0 +1,31 @@
+# Copyright (c) 2025 Clickety Split Ltd.
+# SPDX-License-Identifier: MIT
+#
+
+if BOARD_CLICKETY_SPLIT_MNML_3x6_LEFT
+
+config ZMK_KEYBOARD_NAME
+    default "MNML v2.13"
+
+config ZMK_SPLIT_ROLE_CENTRAL
+    default y
+
+endif # BOARD_CLICKETY_SPLIT_MNML_3x6_LEFT
+
+
+if BOARD_CLICKETY_SPLIT_MNML_3x6_LEFT || BOARD_CLICKETY_SPLIT_MNML_3x6_RIGHT
+
+config BOARD
+    default "clickety_split_mnml_3x6"
+
+config BT_CTLR
+    default BT
+
+if USB_DEVICE_STACK
+
+config USB_NRFX
+    default y
+
+endif # USB_DEVICE_STACK
+
+endif # BOARD_CLICKETY_SPLIT_MNML_3x6_LEFT || BOARD_CLICKETY_SPLIT_MNML_3x6_RIGHT

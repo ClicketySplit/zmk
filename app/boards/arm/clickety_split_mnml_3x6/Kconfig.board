@@ -1,0 +1,14 @@
+# Copyright (c) 2025 Clickety Split Ltd.
+# SPDX-License-Identifier: MIT
+#
+
+config BOARD_CLICKETY_SPLIT_MNML_3x6_LEFT
+    bool "clickety_split_mnml_3x6_left"
+    depends on SOC_NRF52840_QIAA
+    select ZMK_SPLIT
+    select ZMK_SPLIT_ROLE_CENTRAL
+
+config BOARD_CLICKETY_SPLIT_MNML_3x6_RIGHT
+    bool "clickety_split_mnml_3x6_right"
+    depends on SOC_NRF52840_QIAA
+    select ZMK_SPLIT
