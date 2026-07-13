@@ -19,11 +19,8 @@
 
         zmk,display = &ls0xx;
 
-        /* Use MAX17048 SoC reporting */
+        /* Use the MAX17048 fuel gauge for battery state-of-charge reporting. */
         zmk,battery = &max17048;
-
-        /* Fallback: estimate SoC from VDDH (often reads 100% on USB) */
-        // zmk,battery = &vbatt;
 
         zmk,kscan = &kscan0;
         zmk,matrix-transform = &default_transform;
@@ -52,11 +49,6 @@
         control-gpios = <&gpio0 13 GPIO_ACTIVE_HIGH>;
         init-delay-ms = <50>;
     };
-
-    vbatt: vbatt {
-        compatible = "zmk,battery-nrf-vddh";
-    };
-
     leds {
         compatible = "gpio-leds";
         blue_led: led_0 {
