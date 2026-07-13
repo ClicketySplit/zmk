@@ -1,0 +1,14 @@
+boards:
+  - name: clickety_split_mnml_3x6_left
+    vendor: clicketysplit
+    socs:
+      - name: nrf52840
+        variants:
+          - name: zmk
+
+  - name: clickety_split_mnml_3x6_right
+    vendor: clicketysplit
+    socs:
+      - name: nrf52840
+        variants:
+          - name: zmk
