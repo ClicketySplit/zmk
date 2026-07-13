@@ -96,6 +96,19 @@
     };
 };
 
+&spi0 {
+    status = "okay";
+    compatible = "nordic,nrf-spim";
+
+    ls0xx: ls0xx@0 {
+        compatible = "sharp,ls0xx";
+        spi-max-frequency = <1000000>;
+        reg = <0>;
+        width = <160>;
+        height = <68>;
+    };
+};
+
 &reg1 {
     regulator-initial-mode = <NRF5X_REG_MODE_DCDC>;
 };
