@@ -10,7 +10,7 @@ This directory contains the ZMK board definitions and configuration files for th
 
 | Layout        |             Keys | Firmware targets                                                            | Status                                                       |
 | ------------- | ---------------: | --------------------------------------------------------------------------- | ------------------------------------------------------------ |
-| MNML 3x5 + 5M |               40 | `clickety_split_mnml_3x5_left//zmk`<br>`clickety_split_mnml_3x5_right//zmk` | ZMK 4.1 builds successfully; hardware validation in progress |
+| MNML 3x5 + 5M |               40 | `clickety_split_mnml_3x5_left//zmk`<br>`clickety_split_mnml_3x5_right//zmk` | ZMK 4.1 validated |
 | MNML 3x6 + 5M |               46 | `clickety_split_mnml_3x6_left//zmk`<br>`clickety_split_mnml_3x6_right//zmk` | ZMK 4.1 validated                                            |
 | MNML 4x6 + 6M |               60 | Not yet registered                                                          | Planned                                                      |
 
@@ -49,7 +49,7 @@ west build -p \
 
 The ZMK 4.1 board definitions, hardware configuration, firmware configuration, metadata, and keymap have been migrated successfully.
 
-Both halves currently build successfully. Hardware validation is in progress.
+Both halves build successfully and have been validated on physical hardware.
 
 ---
 
