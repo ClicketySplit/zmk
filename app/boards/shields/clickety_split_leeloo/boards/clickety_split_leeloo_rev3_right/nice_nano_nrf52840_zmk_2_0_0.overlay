@@ -96,3 +96,6 @@
         >;
     };
 };
+
+/* Leeloo-owned Sharp memory-in-pixel display wiring. */
+#include "../../clickety_split_leeloo_rev3_nice_nano_v2_mip.dtsi"
