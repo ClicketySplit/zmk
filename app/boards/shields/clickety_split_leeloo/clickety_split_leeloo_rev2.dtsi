@@ -3,4 +3,4 @@
  * SPDX-License-Identifier: MIT
  */
 
-#include "leeloo_common.dtsi"
+#include "clickety_split_leeloo_common.dtsi"

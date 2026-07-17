@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-#include "leeloo.dtsi"
+#include "clickety_split_leeloo.dtsi"
 
 &kscan0 {
     col-gpios

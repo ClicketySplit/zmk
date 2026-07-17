@@ -1,5 +1,5 @@
 file_format: "1"
-id: leeloo
+id: clickety_split_leeloo
 name: Leeloo
 type: shield
 url: https://clicketysplit.ca/pages/leeloo
@@ -10,5 +10,5 @@ features:
   - display
   - encoder
 siblings:
-  - leeloo_left
-  - leeloo_right
+  - clickety_split_leeloo_left
+  - clickety_split_leeloo_right
