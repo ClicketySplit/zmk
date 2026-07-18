@@ -1,0 +1,15 @@
+file_format: "1"
+id: clickety_split_leeloo_micro
+name: Leeloo-Micro
+type: shield
+url: https://clicketysplit.ca/pages/leeloo-micro
+requires: [pro_micro]
+exposes: [i2c_oled]
+features:
+  - keys
+  - display
+  - encoder
+  - underglow
+siblings:
+  - clickety_split_leeloo_micro_left
+  - clickety_split_leeloo_micro_right
