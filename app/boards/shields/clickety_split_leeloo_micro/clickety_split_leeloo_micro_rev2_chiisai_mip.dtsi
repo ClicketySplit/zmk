@@ -1,0 +1,100 @@
+/*
+ * Copyright (c) 2026 Clickety Split Ltd.
+ * SPDX-License-Identifier: MIT
+ *
+ * Leeloo-Micro v1.1/rev2 Clickety Split Chiisai Sharp
+ * memory-in-pixel display integration.
+ *
+ * This definition is owned by the Leeloo-Micro shield. Chiisai remains a
+ * generic Pro Micro-compatible controller and does not contain keyboard-
+ * specific display knowledge.
+ *
+ * No nice_view or nice_view_adapter shield is required.
+ */
+
+#include <dt-bindings/gpio/gpio.h>
+
+/ {
+    chosen {
+        zephyr,display = &leeloo_micro_mip;
+    };
+};
+
+&pinctrl {
+    clickety_split_leeloo_micro_rev2_chiisai_spi0_default:
+        clickety_split_leeloo_micro_rev2_chiisai_spi0_default {
+        group1 {
+            /*
+             * Leeloo-Micro display connector:
+             *
+             *   Pro Micro D3 / SCK  -> Chiisai P1.13
+             *   Pro Micro D2 / MOSI -> Chiisai P1.12
+             */
+            psels = <
+                NRF_PSEL(SPIM_SCK, 1, 13)
+                NRF_PSEL(SPIM_MOSI, 1, 12)
+            >;
+        };
+    };
+
+    clickety_split_leeloo_micro_rev2_chiisai_spi0_sleep:
+        clickety_split_leeloo_micro_rev2_chiisai_spi0_sleep {
+        group1 {
+            psels = <
+                NRF_PSEL(SPIM_SCK, 1, 13)
+                NRF_PSEL(SPIM_MOSI, 1, 12)
+            >;
+            low-power-enable;
+        };
+    };
+};
+
+/*
+ * SPI0 and I2C0 are alternate personalities of nRF52840 peripheral zero.
+ *
+ * The Leeloo-Micro base definition retains its historical SSD1306 OLED on
+ * pro_micro_i2c for rev1 compatibility. The rev2 Chiisai integration uses
+ * that peripheral as SPI0 for the Sharp Memory LCD, so both the inherited
+ * OLED child and I2C0 bus must be disabled.
+ */
+&oled {
+    status = "disabled";
+};
+
+&pro_micro_i2c {
+    status = "disabled";
+};
+
+&spi0 {
+    compatible = "nordic,nrf-spim";
+    status = "okay";
+
+    pinctrl-0 =
+        <&clickety_split_leeloo_micro_rev2_chiisai_spi0_default>;
+    pinctrl-1 =
+        <&clickety_split_leeloo_micro_rev2_chiisai_spi0_sleep>;
+    pinctrl-names = "default", "sleep";
+
+    /*
+     * Leeloo-Micro routes display chip select to Pro Micro D4.
+     * Chiisai maps D4 to P1.14.
+     */
+    cs-gpios = <&pro_micro 4 GPIO_ACTIVE_HIGH>;
+
+    leeloo_micro_mip: ls0xx@0 {
+        compatible = "sharp,ls0xx";
+        status = "okay";
+
+        reg = <0>;
+        spi-max-frequency = <1000000>;
+
+        width = <160>;
+        height = <68>;
+
+        /*
+         * Perform VCOM inversion through the serial protocol.
+         */
+        serial-vcom-inversion;
+        serial-vcom-interval = <33>;
+    };
+};

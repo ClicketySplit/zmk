@@ -1,0 +1,7 @@
+/*
+ * Leeloo-Micro v1.1/rev2 right + Clickety Split Chiisai.
+ *
+ * The shield owns this controller integration. Chiisai remains generic.
+ */
+
+#include "../../clickety_split_leeloo_micro_rev2_chiisai_mip.dtsi"
