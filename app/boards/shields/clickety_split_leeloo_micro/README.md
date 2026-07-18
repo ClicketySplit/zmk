@@ -30,24 +30,24 @@ Development Environment: [Basic Setup](https://zmk.dev/docs/development/setup)
 Build commands for the default keymap of Leeloo-Micro:
 
 ```
-west build -d build/left -p -b nice_nano -- -DSHIELD=leeloo_micro_left
-west build -d build/right -p -b nice_nano -- -DSHIELD=leeloo_micro_right
+west build -d build/left -p -b nice_nano -- -DSHIELD=clickety_split_leeloo_micro_left
+west build -d build/right -p -b nice_nano -- -DSHIELD=clickety_split_leeloo_micro_right
 ```
 
 Build commands for your custom keymap of Leeloo-Micro:
 
 ```
-west build -d build/right -p -b nice_nano -- -DSHIELD=leeloo_micro_right -DZMK_CONFIG="C:/dev/zmk/[yourName]/leeloo_micro/config"
-west build -d build/left -p -b nice_nano -- -DSHIELD=leeloo_micro_left -DZMK_CONFIG="C:/dev/zmk/[yourName]/leeloo_micro/config"
+west build -d build/right -p -b nice_nano -- -DSHIELD=clickety_split_leeloo_micro_right -DZMK_CONFIG="C:/dev/zmk/[yourName]/leeloo_micro/config"
+west build -d build/left -p -b nice_nano -- -DSHIELD=clickety_split_leeloo_micro_left -DZMK_CONFIG="C:/dev/zmk/[yourName]/leeloo_micro/config"
 ```
 
 ## Building Leeloo-Micro's ZMK Firmware with nice!view Displays
 
 There are a couple of files that need to be adjusted before the build commands can be run.
 
-### Edit the leeloo_micro.keymap File
+### Edit the clickety_split_leeloo_micro.keymap File
 
-Near the top 3rd of the leeloo_micro.keymap file, locate the following code block:
+Near the top 3rd of the clickety_split_leeloo_micro.keymap file, locate the following code block:
 
 ```
 //nice_view_spi: &spi0 {
@@ -70,15 +70,15 @@ Save your changes and close the file.
 Build commands for the default keymap of Leeloo-Micro:
 
 ```
-west build -d build/left -p -b nice_nano -- -DSHIELD="leeloo_micro_left nice_view_adapter nice_view"
-west build -d build/right -p -b nice_nano -- -DSHIELD="leeloo_micro_right nice_view_adapter nice_view"
+west build -d build/left -p -b nice_nano -- -DSHIELD="clickety_split_leeloo_micro_left nice_view_adapter nice_view"
+west build -d build/right -p -b nice_nano -- -DSHIELD="clickety_split_leeloo_micro_right nice_view_adapter nice_view"
 ```
 
 Build commands for your custom keymap of Leeloo-Micro:
 
 ```
-west build -d build/left -p -b nice_nano -- -DSHIELD="leeloo_micro_left nice_view_adapter nice_view" -DZMK_CONFIG="/workspaces/zmk-config/[yourName]/leeloo_micro/config"
-west build -d build/right -p -b nice_nano -- -DSHIELD="leeloo_micro_right nice_view_adapter nice_view" -DZMK_CONFIG="/workspaces/zmk-config/[yourName]/leeloo_micro/config"
+west build -d build/left -p -b nice_nano -- -DSHIELD="clickety_split_leeloo_micro_left nice_view_adapter nice_view" -DZMK_CONFIG="/workspaces/zmk-config/[yourName]/leeloo_micro/config"
+west build -d build/right -p -b nice_nano -- -DSHIELD="clickety_split_leeloo_micro_right nice_view_adapter nice_view" -DZMK_CONFIG="/workspaces/zmk-config/[yourName]/leeloo_micro/config"
 ```
 
 # Support

@@ -1,5 +1,5 @@
 file_format: "1"
-id: leeloo_micro
+id: clickety_split_leeloo_micro
 name: Leeloo-Micro
 type: shield
 url: https://clicketysplit.ca/pages/leeloo-micro
@@ -11,5 +11,5 @@ features:
   - encoder
   - underglow
 siblings:
-  - leeloo_micro_left
-  - leeloo_micro_right
+  - clickety_split_leeloo_micro_left
+  - clickety_split_leeloo_micro_right
