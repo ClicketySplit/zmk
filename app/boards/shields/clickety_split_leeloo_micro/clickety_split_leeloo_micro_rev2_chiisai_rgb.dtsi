@@ -1,0 +1,124 @@
+/*
+ * Copyright (c) 2026 Clickety Split Ltd.
+ * SPDX-License-Identifier: MIT
+ *
+ * Leeloo-Micro v1.1/rev2 Clickety Split Chiisai RGB integration.
+ *
+ * This controller-specific definition is owned by the Leeloo-Micro shield.
+ * Chiisai remains a generic Pro Micro-compatible controller.
+ *
+ * Hardware arrangement:
+ *
+ *   Chiisai P0.06 active-high:
+ *       Enables the onboard TPS79333-EP LDO through a 100-ohm series
+ *       resistor. A 10-kilohm resistor pulls the LDO enable low when the
+ *       GPIO is not driven.
+ *
+ *       The LDO output supplies Chiisai VCC through BAT54 protection. VCC
+ *       powers the Sharp display and the source side of the keyboard RGB
+ *       MOSFET. P0.06 must therefore remain asserted continuously.
+ *
+ *   Chiisai rear pad P0.08 active-low:
+ *       Connect to the Leeloo-Micro RGB MOSFET gate using a bodge wire.
+ *       ZMK EXT_POWER controls this GPIO so RGB_ON, RGB_OFF, and RGB_TOG
+ *       switch only the RGB LED rail.
+ *
+ *   Pro Micro TX0 / Arduino D1 / Chiisai P1.09:
+ *       WS2812 SPI data output.
+ *
+ * P0.08 is the documented default bodge-wire GPIO. P0.04 is intentionally
+ * preserved for possible future analog use, and P0.12 remains available as
+ * an alternate spare GPIO.
+ */
+
+#include <dt-bindings/gpio/gpio.h>
+#include <dt-bindings/led/led.h>
+#include <zephyr/dt-bindings/pinctrl/nrf-pinctrl.h>
+
+/ {
+    chosen {
+        zmk,underglow = &led_strip;
+    };
+
+    /*
+     * Override Chiisai's board-level EXT_POWER assignment.
+     *
+     * Generic Chiisai:
+     *     P0.06 active-high -> onboard TPS79333-EP LDO enable
+     *
+     * Leeloo-Micro rev2 Chiisai integration:
+     *     P0.08 active-low -> keyboard RGB MOSFET gate
+     *
+     * The historical EXT_POWER node name is retained so its ZMK settings
+     * identity remains stable.
+     */
+    EXT_POWER {
+        compatible = "zmk,ext-power-generic";
+        control-gpios = <&gpio0 8 GPIO_ACTIVE_LOW>;
+        init-delay-ms = <1>;
+    };
+};
+
+/*
+ * Keep the Chiisai TPS79333-EP LDO enabled continuously.
+ *
+ * Once EXT_POWER is redirected to P0.08, P0.06 is asserted as a GPIO hog.
+ * This preserves VCC for the display and the source side of the RGB MOSFET
+ * independently of the RGB on/off state.
+ */
+&gpio0 {
+    chiisai_vcc_enable: chiisai-vcc-enable {
+        gpio-hog;
+        gpios = <6 GPIO_ACTIVE_HIGH>;
+        output-high;
+        line-name = "chiisai-vcc-enable";
+    };
+};
+
+&pinctrl {
+    leeloo_micro_rev2_chiisai_spi3_default:
+        leeloo_micro_rev2_chiisai_spi3_default {
+        group1 {
+            /*
+             * Pro Micro TX0 / Arduino D1 maps to Chiisai P1.09.
+             */
+            psels = <NRF_PSEL(SPIM_MOSI, 1, 9)>;
+        };
+    };
+
+    leeloo_micro_rev2_chiisai_spi3_sleep:
+        leeloo_micro_rev2_chiisai_spi3_sleep {
+        group1 {
+            psels = <NRF_PSEL(SPIM_MOSI, 1, 9)>;
+            low-power-enable;
+        };
+    };
+};
+
+&spi3 {
+    compatible = "nordic,nrf-spim";
+    status = "okay";
+
+    pinctrl-0 = <&leeloo_micro_rev2_chiisai_spi3_default>;
+    pinctrl-1 = <&leeloo_micro_rev2_chiisai_spi3_sleep>;
+    pinctrl-names = "default", "sleep";
+
+    led_strip: ws2812@0 {
+        compatible = "worldsemi,ws2812-spi";
+        status = "okay";
+
+        reg = <0>;
+        spi-max-frequency = <4000000>;
+
+        /* Leeloo-Micro v1.1/rev2 contains 20 GRB LEDs per half. */
+        chain-length = <20>;
+        spi-one-frame = <0x70>;
+        spi-zero-frame = <0x40>;
+
+        color-mapping = <
+            LED_COLOR_ID_GREEN
+            LED_COLOR_ID_RED
+            LED_COLOR_ID_BLUE
+        >;
+    };
+};
