@@ -7,6 +7,14 @@
 
 / {
     chosen {
+        /*
+         * Base display selection retained for generic I2C OLED
+         * compatibility.
+         *
+         * The Leeloo-Micro rev2 nice!nano v2 controller-specific overlay
+         * overrides zephyr,display with the shield-owned Sharp Memory LCD
+         * and disables both this OLED node and pro_micro_i2c.
+         */
         zephyr,display = &oled;
         zmk,kscan = &kscan0;
         zmk,matrix-transform = &default_transform;
@@ -67,6 +75,12 @@ RC(2,0) RC(2,1) RC(2,2) RC(2,3) RC(2,4) RC(3,4) RC(3,5) RC(2,5) RC(2,6) RC(2,7) 
 
 };
 
+/*
+ * Retained as the base/generic display definition.
+ *
+ * The rev2 nice!nano v2 direct-MIP overlay disables this bus and OLED
+ * before configuring peripheral zero as SPI0 for the Sharp display.
+ */
 &pro_micro_i2c {
     status = "okay";
 
