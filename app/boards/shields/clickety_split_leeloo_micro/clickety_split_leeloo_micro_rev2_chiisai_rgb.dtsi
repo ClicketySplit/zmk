@@ -55,7 +55,12 @@
     EXT_POWER {
         compatible = "zmk,ext-power-generic";
         control-gpios = <&gpio0 8 GPIO_ACTIVE_LOW>;
-        init-delay-ms = <1>;
+
+        /*
+         * Preserve Chiisai's established conservative enable delay.
+         * Physical RGB sequencing remains a hardware-validation item.
+         */
+        init-delay-ms = <50>;
     };
 };
 
