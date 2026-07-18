@@ -1,0 +1,107 @@
+/*
+ * Copyright (c) 2026 Clickety Split Ltd.
+ * SPDX-License-Identifier: MIT
+ *
+ * Leeloo-Micro v1.1/rev2 nice!nano v2 RGB power compatibility.
+ *
+ * Hardware power arrangement:
+ *
+ *   P0.13 active-high:
+ *       nice!nano VCC output supplying the optional display and the source
+ *       side of the RGB MOSFET. This output remains enabled continuously.
+ *
+ *   P1.01 active-low:
+ *       RGB MOSFET gate. ZMK EXT_POWER controls this GPIO so RGB_ON,
+ *       RGB_OFF, and RGB_TOG switch only the RGB LED rail.
+ *
+ *   P0.06:
+ *       WS2812 SPI data output.
+ *
+ * This is a temporary compatibility arrangement until suitable upstream
+ * power-domain support is available. It is intentionally isolated to the
+ * Leeloo-Micro rev2 targets.
+ */
+
+#include <dt-bindings/gpio/gpio.h>
+#include <dt-bindings/led/led.h>
+
+/ {
+    chosen {
+        zmk,underglow = &led_strip;
+    };
+
+    /*
+     * Override the nice!nano v2 EXT_POWER node.
+     *
+     * Default nice!nano assignment:
+     *     P0.13 active-high -> controller VCC output
+     *
+     * Leeloo-Micro rev2 assignment:
+     *     P1.01 active-low -> RGB MOSFET gate
+     */
+    EXT_POWER {
+        compatible = "zmk,ext-power-generic";
+        control-gpios = <&gpio1 1 GPIO_ACTIVE_LOW>;
+        init-delay-ms = <1>;
+    };
+};
+
+/*
+ * Keep the nice!nano VCC output asserted continuously.
+ *
+ * This supplies the optional display and the source side of the RGB MOSFET.
+ * RGB power is switched independently through the MOSFET gate on P1.01.
+ */
+&gpio0 {
+    leeloo_micro_vcc_enable: leeloo-micro-vcc-enable {
+        gpio-hog;
+        gpios = <13 GPIO_ACTIVE_HIGH>;
+        output-high;
+        line-name = "leeloo-micro-vcc-enable";
+    };
+};
+
+&pinctrl {
+    leeloo_micro_rev2_spi3_default:
+        leeloo_micro_rev2_spi3_default {
+        group1 {
+            psels = <NRF_PSEL(SPIM_MOSI, 0, 6)>;
+        };
+    };
+
+    leeloo_micro_rev2_spi3_sleep:
+        leeloo_micro_rev2_spi3_sleep {
+        group1 {
+            psels = <NRF_PSEL(SPIM_MOSI, 0, 6)>;
+            low-power-enable;
+        };
+    };
+};
+
+&spi3 {
+    compatible = "nordic,nrf-spim";
+    status = "okay";
+
+    pinctrl-0 = <&leeloo_micro_rev2_spi3_default>;
+    pinctrl-1 = <&leeloo_micro_rev2_spi3_sleep>;
+    pinctrl-names = "default", "sleep";
+
+    led_strip: ws2812@0 {
+        compatible = "worldsemi,ws2812-spi";
+        status = "okay";
+
+        reg = <0>;
+        spi-max-frequency = <4000000>;
+
+        /* Leeloo-Micro v1.1/rev2 has 20 RGB LEDs per half. */
+        chain-length = <20>;
+        spi-one-frame = <0x70>;
+        spi-zero-frame = <0x40>;
+
+        color-mapping = <
+            LED_COLOR_ID_GREEN
+            LED_COLOR_ID_RED
+            LED_COLOR_ID_BLUE
+        >;
+    };
+};
