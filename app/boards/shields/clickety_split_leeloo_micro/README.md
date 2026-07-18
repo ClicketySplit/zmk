@@ -364,3 +364,71 @@ For questions about Leeloo-Micro, please
 
 Clickety Split
 For the love of split keyboards.
+
+## Clickety Split Chiisai support for rev2
+
+Leeloo-Micro v1.1/rev2 supports the Clickety Split Chiisai controller
+without the `nice_view` or `nice_view_adapter` shields.
+
+The Leeloo-Micro shield owns this integration. Chiisai remains a generic
+Pro Micro-compatible controller and does not contain keyboard-specific
+display definitions.
+
+### Build targets
+
+Use the standard rev2 shield targets with the Chiisai board target:
+
+- `clickety_split_leeloo_micro_rev2_left`
+- `clickety_split_leeloo_micro_rev2_right`
+- board: `clickety_split_chiisai//zmk`
+
+The board-specific configuration and overlay files are loaded
+automatically from the corresponding target directories.
+
+### Display routing
+
+The Sharp LS011B7DH03 160 × 68 Memory LCD uses:
+
+- Pro Micro D2 / Chiisai P1.12 for SPI MOSI;
+- Pro Micro D3 / Chiisai P1.13 for SPI SCK;
+- Pro Micro D4 / Chiisai P1.14 for active-high chip select.
+
+The inherited SSD1306 OLED node and I2C0 are disabled. SPI0 is used for
+the Sharp display.
+
+Chiisai's existing `EXT_POWER` output remains on P0.06, active high.
+The display integration does not redirect that signal to the
+nice!nano-specific P1.01 MOSFET gate.
+
+### Validation
+
+Compile-time validation confirmed:
+
+- automatic controller-specific overlay and configuration discovery;
+- left USB/Bluetooth split-central firmware;
+- right Bluetooth split-peripheral firmware;
+- Sharp LS0XX as the selected display driver;
+- 160 × 68 one-bit LVGL configuration;
+- the expected Chiisai SPI and chip-select routing;
+- absence of the inherited SSD1306 driver;
+- absence of WS2812 and RGB underglow support.
+
+Physical testing on July 18, 2026 confirmed:
+
+- the keyboard types successfully;
+- both split halves communicate;
+- both Sharp displays initialize;
+- both displays render detailed, correctly resolved status information.
+
+This physical checkpoint does not claim complete validation of every
+optional encoder, idle/sleep, battery, or long-term reliability
+scenario unless separately recorded.
+
+### RGB validation boundary
+
+RGB is intentionally disabled in the Chiisai rev2 configuration.
+
+The historical Chiisai RGB-data route and Leeloo-Micro rev2 MOSFET
+power behavior will be handled in a separate validation phase. Display
+and keyboard functionality should remain independently recoverable
+while that work is evaluated.
