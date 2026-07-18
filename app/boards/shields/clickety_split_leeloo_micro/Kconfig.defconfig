@@ -1,10 +1,20 @@
 # Copyright (c) 2023 The ZMK Contributors
 # SPDX-License-Identifier: MIT
 
+if SHIELD_CLICKETY_SPLIT_LEELOO_MICRO_REV2_LEFT
+
+config ZMK_KEYBOARD_NAME
+    default "LM v1.1"
+
+config ZMK_SPLIT_ROLE_CENTRAL
+    default y
+
+endif
+
 if SHIELD_CLICKETY_SPLIT_LEELOO_MICRO_LEFT
 
 config ZMK_KEYBOARD_NAME
-    default "Leeloo-Micro"
+    default "LM v1.0"
 
 config ZMK_SPLIT_ROLE_CENTRAL
     default y
