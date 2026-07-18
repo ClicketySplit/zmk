@@ -1,0 +1,8 @@
+/*
+ * Copyright (c) 2026 Clickety Split Ltd.
+ * SPDX-License-Identifier: MIT
+ *
+ * Default keymap for Clickety Split Leeloo rev1 right.
+ */
+
+#include "clickety_split_leeloo_rev1_keymap.dtsi"

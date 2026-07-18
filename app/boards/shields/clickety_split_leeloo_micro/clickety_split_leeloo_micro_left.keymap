@@ -1,0 +1,8 @@
+/*
+ * Copyright (c) 2026 Clickety Split Ltd.
+ * SPDX-License-Identifier: MIT
+ *
+ * Default keymap wrapper for Clickety Split Leeloo-Micro v1.0 left.
+ */
+
+#include "clickety_split_leeloo_micro_rev1_keymap.dtsi"

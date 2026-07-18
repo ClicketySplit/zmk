@@ -1,0 +1,101 @@
+/*
+ * Copyright (c) 2026 Clickety Split
+ * SPDX-License-Identifier: MIT
+ *
+ * Temporary Leeloo rev3 compatibility experiment.
+ *
+ * The nice!nano v2 VCC output on P0.13 supplies both the display and the
+ * source of the RGB MOSFET. Keep P0.13 asserted so the display remains
+ * powered independently of RGB state.
+ *
+ * Redirect ZMK's EXT_POWER device to the active-low RGB MOSFET gate on
+ * P1.01. This allows RGB_ON, RGB_OFF, and RGB_TOG to switch the RGB rail
+ * without switching off the display.
+ *
+ * Known temporary limitations include possible RGB rail activation during
+ * startup or resume and imperfect black-frame/power-off sequencing.
+ */
+
+#include <dt-bindings/gpio/gpio.h>
+#include <dt-bindings/led/led.h>
+
+/ {
+    chosen {
+        zmk,underglow = &led_strip;
+    };
+
+    /*
+     * Override the nice!nano v2 EXT_POWER node.
+     *
+     * Default nice!nano wiring:
+     *     P0.13 active-high -> controller VCC output
+     *
+     * Leeloo rev3 experimental wiring:
+     *     P1.01 active-low -> RGB MOSFET gate
+     */
+    EXT_POWER {
+        compatible = "zmk,ext-power-generic";
+        control-gpios = <&gpio1 1 GPIO_ACTIVE_LOW>;
+        init-delay-ms = <1>;
+    };
+};
+
+/*
+ * Keep the nice!nano v2 VCC output enabled continuously.
+ *
+ * This preserves power to the nice!view display and to the source side of
+ * the Leeloo rev3 RGB MOSFET. RGB rail switching occurs separately on P1.01.
+ */
+&gpio0 {
+    leeloo_vcc_enable: leeloo-vcc-enable {
+        gpio-hog;
+        gpios = <13 GPIO_ACTIVE_HIGH>;
+        output-high;
+        line-name = "leeloo-vcc-enable";
+    };
+};
+
+&pinctrl {
+    spi3_default: spi3_default {
+        group1 {
+            psels = <NRF_PSEL(SPIM_MOSI, 0, 6)>;
+        };
+    };
+
+    spi3_sleep: spi3_sleep {
+        group1 {
+            psels = <NRF_PSEL(SPIM_MOSI, 0, 6)>;
+            low-power-enable;
+        };
+    };
+};
+
+&spi3 {
+    compatible = "nordic,nrf-spim";
+    status = "okay";
+
+    pinctrl-0 = <&spi3_default>;
+    pinctrl-1 = <&spi3_sleep>;
+    pinctrl-names = "default", "sleep";
+
+    led_strip: ws2812@0 {
+        compatible = "worldsemi,ws2812-spi";
+
+        reg = <0>;
+        spi-max-frequency = <4000000>;
+
+        /* Leeloo v2.1/rev3 has 29 RGB LEDs per half. */
+        chain-length = <29>;
+        spi-one-frame = <0x70>;
+        spi-zero-frame = <0x40>;
+
+        color-mapping = <
+            LED_COLOR_ID_GREEN
+            LED_COLOR_ID_RED
+            LED_COLOR_ID_BLUE
+        >;
+    };
+};
+
+/* Leeloo-owned Sharp memory-in-pixel display wiring. */
+#include "../../clickety_split_leeloo_rev3_nice_nano_v2_mip.dtsi"
