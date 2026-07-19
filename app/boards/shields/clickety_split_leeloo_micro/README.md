@@ -190,7 +190,7 @@ Left half:
 
 ~~~bash
 west build -p -d build/leeloo_micro_rev2_left \
-  -b nice_nano_v2 -- \
+  -b nice_nano//zmk -- \
   -DSHIELD=clickety_split_leeloo_micro_rev2_left
 ~~~
 
@@ -198,7 +198,7 @@ Right half:
 
 ~~~bash
 west build -p -d build/leeloo_micro_rev2_right \
-  -b nice_nano_v2 -- \
+  -b nice_nano//zmk -- \
   -DSHIELD=clickety_split_leeloo_micro_rev2_right
 ~~~
 
