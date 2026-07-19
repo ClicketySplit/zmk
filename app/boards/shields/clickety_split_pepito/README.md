@@ -1,8 +1,34 @@
-# Clickety Split Pepito
+# Clickety Split | Pepito
 
-Pepito is a wireless 3×6+4 split keyboard designed by Clickety Split. This shield definition supports Pepito v1.13 on ZMK 4.1 using a Seeed Studio XIAO nRF52840 controller on each half.
+- **Designed by:** [Clickety Split](https://clicketysplit.ca)
+- **Website:** [clicketysplit.ca](https://clicketysplit.ca)
+- **GitHub:** [ClicketySplit](https://github.com/ClicketySplit)
 
-## Supported Targets
+## Overview
+
+Pepito is a wireless 3×6+4 split keyboard designed by Clickety Split.
+The current shield supports Pepito v1.13 on ZMK 4.1 using one Seeed
+Studio XIAO nRF52840 controller on each half.
+
+Each half combines its 22-key matrix and a Sharp
+LS011B7DH03-compatible 160 × 68 Memory LCD on a shared SPI bus. The
+left half is the split central and the right half is the peripheral.
+
+## Features
+
+- Split 3×6+4 ergonomic layout
+- Seeed Studio XIAO nRF52840 controllers
+- Separate central and peripheral shield targets
+- 74HC595-compatible matrix-column expansion
+- One directly connected Sharp Memory LCD per half
+- Shared matrix-expander and display SPI bus
+- Mirrored right-half matrix ordering
+- USB HID on the central-capable left half
+- Bluetooth Low Energy split operation
+- Maintained default ZMK keymap
+- UF2 firmware output
+
+## Supported Targets and Controller
 
 Pepito provides two shield targets:
 
@@ -17,7 +43,10 @@ xiao_ble//zmk
 
 The left half is the split central. The right half is the split peripheral.
 
-## Hardware Overview
+`clickety_split_pepito` is the shared source, metadata, Devicetree,
+and keymap stem. It is not a third public shield build target.
+
+## Hardware Architecture
 
 Each half includes:
 
@@ -29,14 +58,14 @@ Each half includes:
 
 Pepito does not use RGB underglow, an external-power controller, a regulator node, or a shield-specific power domain.
 
-## Shared SPI Architecture
+### Shared SPI Architecture
 
 Pepito uses the XIAO SPI bus supplied by the ZMK 4.1 `xiao_ble//zmk` board definition.
 
-| Signal | XIAO pin | nRF52840 pin |
-|---|---:|---:|
-| SCK | D8 | P1.13 |
-| MOSI | D10 | P1.15 |
+| Signal | XIAO pin | Route or behavior |
+| --- | ---: | --- |
+| SCK | D8 | nRF52840 P1.13 |
+| MOSI | D10 | nRF52840 P1.15 |
 | Shift-register CS | D7 | Active low |
 | Display CS | D6 | Active high |
 
@@ -52,7 +81,7 @@ The matrix expander is declared using the ZMK Devicetree compatible
 
 The current XIAO board definition already provides the required SPI pin control. Pepito therefore does not carry a shield-owned board pinctrl override.
 
-## Matrix Layout
+### Matrix Layout
 
 The four matrix rows are connected to XIAO D0 through D3 and use pull-down inputs.
 
@@ -83,7 +112,7 @@ Pepito does **not** require `nice_view` or `nice_view_adapter`.
 
 Do not add either adapter shield to the build command.
 
-## Configuration Notes
+## Configuration and Keymap
 
 The left and right targets intentionally use separate configuration fragments.
 
@@ -108,7 +137,12 @@ The right half is a split peripheral and does not expose ZMK USB HID. This setti
 
 Disabling ZMK USB on the right half does not prevent the XIAO bootloader from accepting UF2 firmware during flashing.
 
-## Building
+The maintained default keymap is
+`clickety_split_pepito.keymap`. A user configuration can provide a
+keymap matching the selected shield target when layout customization
+is required.
+
+## Building Firmware
 
 Run the commands from the ZMK workspace root.
 
@@ -146,7 +180,7 @@ The generated firmware will be located at:
 build/clickety_split_pepito_right/zephyr/zmk.uf2
 ```
 
-## Flashing
+## Flashing Firmware
 
 Flash the matching UF2 to each half:
 
@@ -160,7 +194,51 @@ Use the left firmware only on the left half and the right firmware only on the r
 
 A settings-reset UF2 may be useful before testing when either controller contains bonds or settings from older firmware.
 
-## Build Warning
+## Validation Status
+
+As of July 18, 2026:
+
+### Build-Validated
+
+The following public target combinations compile successfully in the
+current ZMK 4.1 workspace:
+
+- `xiao_ble//zmk` with `clickety_split_pepito_left`; and
+- `xiao_ble//zmk` with `clickety_split_pepito_right`.
+
+### Generated-Output Validated
+
+Generated configuration and build output were inspected for:
+
+- target-specific configuration resolution;
+- generated Kconfig;
+- generated Devicetree;
+- GPIO-595 driver inclusion;
+- Sharp LS0XX driver inclusion;
+- left and right split-role selection; and
+- matrix row and column ordering.
+
+### Physical Validation Pending
+
+No physical Pepito keyboard behavior is currently claimed as validated.
+The following functional checks remain pending:
+
+- switch-matrix operation;
+- both physical displays;
+- split pairing and reconnect;
+- USB HID;
+- BLE HID; and
+- sleep and wake.
+
+Successful compilation and generated-output auditing do not by themselves
+confirm physical keyboard behavior.
+
+### Longer-Term Validation
+
+Longer-term battery and reliability testing remains pending after the
+functional physical checks are completed.
+
+## Compatibility and Limitations
 
 ZMK 4.1 currently emits:
 
@@ -172,30 +250,17 @@ Pepito uses ZMK's in-tree `zmk,kscan-gpio-matrix` implementation together with t
 
 A future migration to ZMK's newer input subsystem should be treated as a separate engineering change and physically tested with Pepito's shift-register-backed columns.
 
-## Validation Status
-
-As of July 18, 2026:
-
-| Validation area | Status |
-|---|---|
-| ZMK 4.1 left build | Complete |
-| ZMK 4.1 right build | Complete |
-| Target-specific configuration resolution | Complete |
-| Generated Kconfig audit | Complete |
-| Generated Devicetree audit | Complete |
-| GPIO-595 driver inclusion | Complete |
-| Sharp LS0XX driver inclusion | Complete |
-| Left/right split-role audit | Complete |
-| Matrix row and column-order audit | Complete |
-| Physical switch-matrix test | Pending |
-| Physical display test | Pending |
-| Split pairing and reconnect test | Pending |
-| USB HID test | Pending |
-| BLE HID test | Pending |
-| Sleep and wake test | Pending |
-| Longer-term battery and reliability testing | Pending |
-
-Successful compilation and generated-output auditing do not by themselves confirm physical keyboard behavior.
+- Use `clickety_split_pepito_left` for the central half and
+  `clickety_split_pepito_right` for the peripheral half.
+- Do not use the unsuffixed shared identifier as a build target.
+- Do not add `nice_view` or `nice_view_adapter`; Pepito owns its
+  displays directly.
+- The right-side configuration disables application-wide USB with
+  `CONFIG_ZMK_USB=n`.
+- Pepito does not use RGB underglow, an external-power controller, a
+  regulator node, or a shield-specific power domain.
+- Do not convert pending physical checks into validation claims until
+  those tests are completed.
 
 ## Migration Notes
 
@@ -210,8 +275,15 @@ The ZMK 4.1 migration:
 - uses Zephyr's current `sharp,ls0xx` display driver with serial VCOM inversion;
 - requires no custom Pepito driver or power-domain workaround.
 
-## Project Links
+## Support
 
-- Clickety Split: https://clicketysplit.ca/
-- Pepito product page: https://clicketysplit.ca/pages/pepito
-- ZMK Firmware: https://zmk.dev/
+For product information, see the
+[Pepito product page](https://clicketysplit.ca/pages/pepito).
+
+For questions about this hardware, please
+[contact Clickety Split](https://clicketysplit.ca/pages/contact-us).
+
+General firmware documentation is available from
+[ZMK Firmware](https://zmk.dev).
+
+**Clickety Split** — For the love of split keyboards.
