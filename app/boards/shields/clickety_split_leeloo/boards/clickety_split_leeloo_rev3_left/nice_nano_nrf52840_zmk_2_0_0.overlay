@@ -2,7 +2,7 @@
  * Copyright (c) 2026 Clickety Split Ltd.
  * SPDX-License-Identifier: MIT
  *
- * Temporary Leeloo rev3 compatibility experiment.
+ * Temporary Leeloo rev3 compatibility configuration.
  *
  * The nice!nano v2 VCC output on P0.13 supplies both the display and the
  * source of the RGB MOSFET. Keep P0.13 asserted so the display remains
@@ -30,7 +30,7 @@
      * Default nice!nano wiring:
      *     P0.13 active-high -> controller VCC output
      *
-     * Leeloo rev3 experimental wiring:
+     * Leeloo rev3 temporary compatibility wiring:
      *     P1.01 active-low -> RGB MOSFET gate
      */
     EXT_POWER {
