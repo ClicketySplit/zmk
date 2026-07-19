@@ -62,22 +62,22 @@ Pepito does not use RGB underglow, an external-power controller, a regulator nod
 
 Pepito uses the XIAO SPI bus supplied by the ZMK 4.1 `xiao_ble//zmk` board definition.
 
-| Signal | XIAO pin | Route or behavior |
-| --- | ---: | --- |
-| SCK | D8 | nRF52840 P1.13 |
-| MOSI | D10 | nRF52840 P1.15 |
-| Shift-register CS | D7 | Active low |
-| Display CS | D6 | Active high |
+| Signal            | XIAO pin | Route or behavior |
+| ----------------- | -------: | ----------------- |
+| SCK               |       D8 | nRF52840 P1.13    |
+| MOSI              |      D10 | nRF52840 P1.15    |
+| Shift-register CS |       D7 | Active low        |
+| Display CS        |       D6 | Active high       |
 
 The devices share the bus as follows:
 
 The matrix expander is declared using the ZMK Devicetree compatible
 `zmk,gpio-595`.
 
-| SPI address | Device | Maximum frequency |
-|---:|---|---:|
-| 0 | 74HC595-compatible GPIO expander | 200 kHz |
-| 1 | Sharp LS011B7DH03-compatible display | 1 MHz |
+| SPI address | Device                               | Maximum frequency |
+| ----------: | ------------------------------------ | ----------------: |
+|           0 | 74HC595-compatible GPIO expander     |           200 kHz |
+|           1 | Sharp LS011B7DH03-compatible display |             1 MHz |
 
 The current XIAO board definition already provides the required SPI pin control. Pepito therefore does not carry a shield-owned board pinctrl override.
 

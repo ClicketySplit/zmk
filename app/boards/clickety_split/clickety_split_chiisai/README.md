@@ -32,15 +32,15 @@ used by Zephyr and ZMK.
 
 The ZMK-qualified board target is:
 
-~~~text
+```text
 clickety_split_chiisai/nrf52840/zmk
-~~~
+```
 
 ZMK metadata and build matrices may represent the same qualified target as:
 
-~~~text
+```text
 clickety_split_chiisai//zmk
-~~~
+```
 
 The public board name remains consistently prefixed with
 `clickety_split_chiisai`.
@@ -67,16 +67,16 @@ peripheral and pinctrl configuration.
 
 The following routes are important to current Clickety Split integrations:
 
-| Connector Route | nRF52840 GPIO | Current Use |
-| --- | --- | --- |
-| TX0 / Arduino D1 | P1.09 | UART TX; WS2812 data for Leeloo-family Chiisai integrations |
-| Arduino D2 | P1.12 | Sharp Memory LCD MOSI |
-| Arduino D3 | P1.13 | Sharp Memory LCD SCK |
-| Arduino D4 | P1.14 | Active-high Sharp Memory LCD chip select |
-| Arduino D18 | P1.01 | Leeloo matrix routing; not the Chiisai RGB MOSFET route |
-| Rear A2 pad | P0.04 | Additional GPIO with possible analog use |
-| Rear GPIO pad | P0.08 | Preferred Leeloo-family RGB MOSFET bodge route |
-| Rear GPIO pad | P0.12 | Additional GPIO |
+| Connector Route  | nRF52840 GPIO | Current Use                                                 |
+| ---------------- | ------------- | ----------------------------------------------------------- |
+| TX0 / Arduino D1 | P1.09         | UART TX; WS2812 data for Leeloo-family Chiisai integrations |
+| Arduino D2       | P1.12         | Sharp Memory LCD MOSI                                       |
+| Arduino D3       | P1.13         | Sharp Memory LCD SCK                                        |
+| Arduino D4       | P1.14         | Active-high Sharp Memory LCD chip select                    |
+| Arduino D18      | P1.01         | Leeloo matrix routing; not the Chiisai RGB MOSFET route     |
+| Rear A2 pad      | P0.04         | Additional GPIO with possible analog use                    |
+| Rear GPIO pad    | P0.08         | Preferred Leeloo-family RGB MOSFET bodge route              |
+| Rear GPIO pad    | P0.12         | Additional GPIO                                             |
 
 The full connector mapping remains defined in
 `arduino_pro_micro_pins.dtsi`.
@@ -116,33 +116,33 @@ Build Chiisai firmware with the qualified board target and the required shield.
 
 Generic form:
 
-~~~bash
+```bash
 west build -p -d build/<name> \
   -b clickety_split_chiisai/nrf52840/zmk -- \
   -DSHIELD=<shield_name>
-~~~
+```
 
 Example for the left half of Leeloo-Micro rev2:
 
-~~~bash
+```bash
 west build -p -d build/leeloo_micro_chiisai_left \
   -b clickety_split_chiisai/nrf52840/zmk -- \
   -DSHIELD=clickety_split_leeloo_micro_rev2_left
-~~~
+```
 
 Example for the right half:
 
-~~~bash
+```bash
 west build -p -d build/leeloo_micro_chiisai_right \
   -b clickety_split_chiisai/nrf52840/zmk -- \
   -DSHIELD=clickety_split_leeloo_micro_rev2_right
-~~~
+```
 
 The UF2 output is normally available at:
 
-~~~text
+```text
 build/<name>/zephyr/zmk.uf2
-~~~
+```
 
 Build both halves when using Chiisai on a split keyboard.
 

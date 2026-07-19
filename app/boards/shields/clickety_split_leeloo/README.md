@@ -31,11 +31,11 @@ forcing newer power or display behavior onto earlier boards.
 
 ## Hardware Revisions and ZMK Targets
 
-| Hardware | Metadata Name | Left Target | Right Target | Current Documentation Boundary |
-| --- | --- | --- | --- | --- |
-| Rev1 | Leeloo | `clickety_split_leeloo_left` | `clickety_split_leeloo_right` | Shared legacy configuration retained |
-| Rev2 | Leeloo v2 | `clickety_split_leeloo_rev2_left` | `clickety_split_leeloo_rev2_right` | OLED and RGB configuration retained |
-| Rev3 | Leeloo v2.1 | `clickety_split_leeloo_rev3_left` | `clickety_split_leeloo_rev3_right` | Controller-specific display and RGB integrations |
+| Hardware | Metadata Name | Left Target                       | Right Target                       | Current Documentation Boundary                   |
+| -------- | ------------- | --------------------------------- | ---------------------------------- | ------------------------------------------------ |
+| Rev1     | Leeloo        | `clickety_split_leeloo_left`      | `clickety_split_leeloo_right`      | Shared legacy configuration retained             |
+| Rev2     | Leeloo v2     | `clickety_split_leeloo_rev2_left` | `clickety_split_leeloo_rev2_right` | OLED and RGB configuration retained              |
+| Rev3     | Leeloo v2.1   | `clickety_split_leeloo_rev3_left` | `clickety_split_leeloo_rev3_right` | Controller-specific display and RGB integrations |
 
 The Rev1 and Rev2 targets remain available in the ZMK 4.1 source tree. This
 README does not claim renewed physical validation for those revisions unless
@@ -181,43 +181,43 @@ Leeloo revision and half.
 
 Left half:
 
-~~~bash
+```bash
 west build -p -d build/leeloo_rev3_left \
   -b nice_nano//zmk -- \
   -DSHIELD=clickety_split_leeloo_rev3_left
-~~~
+```
 
 Right half:
 
-~~~bash
+```bash
 west build -p -d build/leeloo_rev3_right \
   -b nice_nano//zmk -- \
   -DSHIELD=clickety_split_leeloo_rev3_right
-~~~
+```
 
 ### Leeloo Rev3 with Chiisai
 
 Left half:
 
-~~~bash
+```bash
 west build -p -d build/leeloo_rev3_chiisai_left \
   -b clickety_split_chiisai/nrf52840/zmk -- \
   -DSHIELD=clickety_split_leeloo_rev3_left
-~~~
+```
 
 Right half:
 
-~~~bash
+```bash
 west build -p -d build/leeloo_rev3_chiisai_right \
   -b clickety_split_chiisai/nrf52840/zmk -- \
   -DSHIELD=clickety_split_leeloo_rev3_right
-~~~
+```
 
 The resulting UF2 file is normally located at:
 
-~~~text
+```text
 build/<name>/zephyr/zmk.uf2
-~~~
+```
 
 Build and flash both halves of the split keyboard.
 

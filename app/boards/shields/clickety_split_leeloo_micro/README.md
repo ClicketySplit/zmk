@@ -32,9 +32,9 @@ or Clickety Split Chiisai.
 
 ## Hardware Revisions and ZMK Targets
 
-| Hardware | Metadata Name | Left Target | Right Target | Current Documentation Boundary |
-| --- | --- | --- | --- | --- |
-| v1.0 / Rev1 | Leeloo-Micro | `clickety_split_leeloo_micro_left` | `clickety_split_leeloo_micro_right` | Shared legacy configuration retained |
+| Hardware    | Metadata Name     | Left Target                             | Right Target                             | Current Documentation Boundary                         |
+| ----------- | ----------------- | --------------------------------------- | ---------------------------------------- | ------------------------------------------------------ |
+| v1.0 / Rev1 | Leeloo-Micro      | `clickety_split_leeloo_micro_left`      | `clickety_split_leeloo_micro_right`      | Shared legacy configuration retained                   |
 | v1.1 / Rev2 | Leeloo-Micro v1.1 | `clickety_split_leeloo_micro_rev2_left` | `clickety_split_leeloo_micro_rev2_right` | Controller-specific Sharp display and RGB integrations |
 
 The Rev1 targets remain available in the ZMK 4.1 source tree. This README does
@@ -188,43 +188,43 @@ Leeloo-Micro revision and half.
 
 Left half:
 
-~~~bash
+```bash
 west build -p -d build/leeloo_micro_rev2_left \
   -b nice_nano//zmk -- \
   -DSHIELD=clickety_split_leeloo_micro_rev2_left
-~~~
+```
 
 Right half:
 
-~~~bash
+```bash
 west build -p -d build/leeloo_micro_rev2_right \
   -b nice_nano//zmk -- \
   -DSHIELD=clickety_split_leeloo_micro_rev2_right
-~~~
+```
 
 ### Leeloo-Micro Rev2 with Chiisai
 
 Left half:
 
-~~~bash
+```bash
 west build -p -d build/leeloo_micro_rev2_chiisai_left \
   -b clickety_split_chiisai/nrf52840/zmk -- \
   -DSHIELD=clickety_split_leeloo_micro_rev2_left
-~~~
+```
 
 Right half:
 
-~~~bash
+```bash
 west build -p -d build/leeloo_micro_rev2_chiisai_right \
   -b clickety_split_chiisai/nrf52840/zmk -- \
   -DSHIELD=clickety_split_leeloo_micro_rev2_right
-~~~
+```
 
 The resulting UF2 file is normally located at:
 
-~~~text
+```text
 build/<name>/zephyr/zmk.uf2
-~~~
+```
 
 Build and flash both halves of the split keyboard.
 
