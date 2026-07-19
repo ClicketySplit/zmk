@@ -1,434 +1,395 @@
 # Clickety Split | Leeloo-Micro
 
-![Leeloo-Micro v1 Wireless](https://github.com/ClicketySplit/build-guides/blob/main/leeloo/images/gallery/Leeloo-Micro-v1-ZMK.jpg)
+- **Designed by:** [Clickety Split](https://clicketysplit.ca)
+- **Website:** [clicketysplit.ca](https://clicketysplit.ca)
+- **GitHub:** [ClicketySplit](https://github.com/ClicketySplit)
 
-Keyboard Designer: [clicketysplit.ca](https://clicketysplit.ca)
-GitHub: [ClicketySplit](https://github.com/ClicketySplit)
-Primary Controller: nice!nano v2
+## Overview
 
-Leeloo-Micro is a compact 3×5+5 split keyboard derived from Leeloo.
-It retains the Leeloo column stagger and modifier row while removing the
-top row and outer columns.
+Leeloo-Micro is a compact split ergonomic keyboard family designed by
+Clickety Split. The current ZMK shield definitions support the original
+Leeloo-Micro v1.0 hardware and Leeloo-Micro v1.1.
 
-The shield family supports two Leeloo-Micro hardware revisions.
+The source tree keeps revision-specific shield targets separate and provides
+controller-specific display and RGB routing for Leeloo-Micro v1.1 / Rev2.
+This preserves established Rev1 behavior while allowing Rev2 to support its
+Sharp displays and switched RGB power rail correctly with either nice!nano v2
+or Clickety Split Chiisai.
 
 ## Features
 
-- Compact 3×5+5 split layout.
-- Kailh Low Profile Choc switches with 18 mm × 18 mm spacing.
-- Socketed switch positions.
-- Support for one Alps Alpine EC11 rotary encoder on each half.
-- Socketed rotary-encoder positions.
-- Socketed display support.
-- Per-switch RGB lighting.
-- Support for 110 mAh and 700 mAh batteries.
-- Alps Alpine micro on/off switches.
+- Split central and peripheral operation
+- Separate left and right shield targets
+- Support for Leeloo-Micro v1.0 / Rev1 and v1.1 / Rev2
+- OLED / SSD1306 support in the shared and Rev1 configuration
+- Dual Sharp LS011B7DH03 160 × 68 Memory LCD support for Rev2
+- RGB underglow support
+- Controller-specific Rev2 RGB power handling
+- nice!nano v2 and Clickety Split Chiisai Rev2 integrations
+- User-configurable ZMK keymaps
+- USB and Bluetooth Low Energy operation through the installed controller
+- UF2 firmware output when supported by the selected controller board
 
-# Hardware Revisions and ZMK Targets
+## Hardware Revisions and ZMK Targets
 
-| Hardware | Left target | Right target | Default keymap |
-|---|---|---|---|
-| Leeloo-Micro v1.0 / rev1 | `clickety_split_leeloo_micro_left` | `clickety_split_leeloo_micro_right` | `clickety_split_leeloo_micro_rev1_keymap.dtsi` |
-| Leeloo-Micro v1.1 / rev2 | `clickety_split_leeloo_micro_rev2_left` | `clickety_split_leeloo_micro_rev2_right` | `clickety_split_leeloo_micro_rev2.keymap` |
+| Hardware | Metadata Name | Left Target | Right Target | Current Documentation Boundary |
+| --- | --- | --- | --- | --- |
+| v1.0 / Rev1 | Leeloo-Micro | `clickety_split_leeloo_micro_left` | `clickety_split_leeloo_micro_right` | Shared legacy configuration retained |
+| v1.1 / Rev2 | Leeloo-Micro v1.1 | `clickety_split_leeloo_micro_rev2_left` | `clickety_split_leeloo_micro_rev2_right` | Controller-specific Sharp display and RGB integrations |
 
-The original public target names represent Leeloo-Micro v1.0 and do not
-contain `rev1`. The explicit `rev2` targets represent Leeloo-Micro v1.1.
+The Rev1 targets remain available in the ZMK 4.1 source tree. This README does
+not claim renewed physical validation for Rev1 unless the exact keyboard,
+controller, and tested functions are identified.
 
-No unprefixed compatibility aliases are provided. All public targets use
-the `clickety_split_` namespace.
+Rev2 is the primary controller-specific integration in the current migration
+workstream.
 
-# Building Leeloo-Micro Firmware
+## Controller Support
 
-The examples below assume they are run from the root of a ZMK workspace
-and use the ZMK 4.1 nice!nano board target:
+### nice!nano v2
 
-```text
-nice_nano//zmk
-```
+Leeloo-Micro Rev2 supports nice!nano v2 through controller-specific
+configuration and overlay files for both halves.
 
-Useful ZMK references:
+The Rev2 compatibility configuration separates display power from the RGB
+underglow rail:
 
-- [Introduction to ZMK](https://zmk.dev/docs/)
-- [Installing ZMK](https://zmk.dev/docs/user-setup)
-- [Customizing ZMK](https://zmk.dev/docs/customization)
-- [Development setup](https://zmk.dev/docs/development/setup)
+- nice!nano P0.13 keeps controller VCC and display power available;
+- nice!nano P1.01 controls the active-low RGB MOSFET gate;
+- nice!nano P0.06 carries WS2812 data; and
+- ZMK `EXT_POWER` controls the RGB MOSFET route.
 
-## Leeloo-Micro v1.0 / rev1
+This configuration has been physically validated, including dual-display
+operation, RGB underglow, and RGB settings persistence across power cycles.
 
-```bash
-west build -p always -s app \
-  -d build/clickety_split_leeloo_micro_left \
-  -b nice_nano//zmk -- \
-  -DSHIELD=clickety_split_leeloo_micro_left
+The compatibility implementation remains temporary until a suitable upstream
+ZMK power-domain mechanism can replace it.
 
-west build -p always -s app \
-  -d build/clickety_split_leeloo_micro_right \
-  -b nice_nano//zmk -- \
-  -DSHIELD=clickety_split_leeloo_micro_right
-```
+### Clickety Split Chiisai
 
-## Leeloo-Micro v1.1 / rev2
+Leeloo-Micro Rev2 also includes controller-specific display and RGB definitions
+for Clickety Split Chiisai.
 
-The rev2 targets automatically include their RGB power handling and
-direct Sharp Memory LCD configuration.
+The current Chiisai routing uses:
 
-Do not add `nice_view_adapter` or `nice_view` to the rev2 build commands.
+- P0.06 to keep the Chiisai TPS79333-EP regulator and controller VCC active;
+- rear P0.08 as the active-low RGB MOSFET control through the required bodge
+  connection;
+- P1.09 / D1 / TX0 for WS2812 data;
+- P1.12 / D2 for Sharp display MOSI;
+- P1.13 / D3 for Sharp display SCK; and
+- P1.14 / D4 for active-high Sharp display chip select.
 
-```bash
-west build -p always -s app \
-  -d build/clickety_split_leeloo_micro_rev2_left \
-  -b nice_nano//zmk -- \
+P1.01 / D18 must not be treated as the Chiisai RGB MOSFET route.
+
+The Leeloo-Micro Rev2 Chiisai integration has been physically validated for
+keyboard input, split communication, both Sharp displays, correctly resolved
+status information, and RGB underglow.
+
+### Shared and Legacy Controller Paths
+
+Rev1 and the shared shield files retain the established Pro Micro-compatible
+controller structure used by the original Leeloo-Micro implementation.
+
+Pro Micro-compatible connector placement does not guarantee that display, RGB,
+or power-control routing is interchangeable between controllers. Use the
+controller-specific Rev2 files provided for the installed controller.
+
+## Display Support
+
+### OLED / SSD1306
+
+The shared and Rev1 Leeloo-Micro definitions retain OLED / SSD1306 support for
+the original hardware configuration.
+
+The presence of inherited OLED definitions does not mean that the
+controller-specific Rev2 integrations use OLED displays. The Rev2 controller
+files disable the inherited OLED node and provide the appropriate Sharp
+display route.
+
+### Sharp Memory LCD
+
+Leeloo-Micro Rev2 uses two Sharp LS011B7DH03 160 × 68 Memory LCD displays.
+
+The nice!nano v2 and Chiisai integrations each provide the display routing
+required by their controller. The Chiisai route uses P1.12 for MOSI, P1.13 for
+SCK, and P1.14 for active-high chip select.
+
+The controller-specific Rev2 display definitions are self-contained. Do not
+add the supplemental `nice_view` or `nice_view_adapter` shields to these
+builds.
+
+Physical validation confirmed both Sharp displays with:
+
+- Leeloo-Micro v1.1 / Rev2 and nice!nano v2; and
+- Leeloo-Micro v1.1 / Rev2 and Clickety Split Chiisai.
+
+## RGB and Power Control
+
+The controller-specific Rev2 configurations enable
+`CONFIG_ZMK_RGB_UNDERGLOW` and `CONFIG_ZMK_RGB_UNDERGLOW_EXT_POWER` for both
+halves. They set `CONFIG_ZMK_RGB_UNDERGLOW_ON_START=n`, keeping RGB off during
+startup, and use conservative brightness defaults for the validated hardware.
+
+The controller-specific files provide the correct WS2812 data and active-low
+MOSFET routes. With the assigned `EXT_POWER` configuration enabled, ZMK
+`RGB_ON`, `RGB_OFF`, and `RGB_TOG` switch the active-low RGB MOSFET while
+leaving the display supply available. Do not copy those routes between
+controllers.
+
+### Rev1
+
+The original Leeloo-Micro revision retains its established RGB and
+external-power configuration. The Rev2 MOSFET compatibility configuration must
+not be applied automatically to Rev1.
+
+### Rev2 with nice!nano v2
+
+Leeloo-Micro Rev2 uses an active-low MOSFET to switch the RGB underglow supply
+while leaving the display supply available.
+
+The ZMK 4.1 compatibility configuration redirects ZMK `EXT_POWER` from the
+normal nice!nano VCC-control route to the MOSFET gate on P1.01. P0.13 remains
+asserted for controller VCC and display power. WS2812 data uses P0.06.
+
+Physical testing confirmed:
+
+- keyboard operation;
+- split communication;
+- both Sharp displays;
+- RGB underglow operation;
+- RGB settings persistence across power cycles; and
+- normal startup and use during the completed functional checkpoint.
+
+### Rev2 with Chiisai
+
+The Chiisai integration keeps P0.06 asserted for the onboard regulator and VCC,
+redirects ZMK `EXT_POWER` to rear P0.08 for the active-low RGB MOSFET, and uses
+P1.09 for WS2812 data.
+
+A physical bodge connection to rear P0.08 is required for this RGB control
+route.
+
+Physical testing confirmed:
+
+- keyboard input;
+- split communication;
+- both Sharp displays;
+- correctly resolved display status information;
+- RGB underglow operation; and
+- operation with the maintained ZMK 4.1 integration.
+
+## Building Firmware
+
+Build the selected controller board with the shield target for the required
+Leeloo-Micro revision and half.
+
+### Leeloo-Micro Rev2 with nice!nano v2
+
+Left half:
+
+~~~bash
+west build -p -d build/leeloo_micro_rev2_left \
+  -b nice_nano_v2 -- \
   -DSHIELD=clickety_split_leeloo_micro_rev2_left
+~~~
 
-west build -p always -s app \
-  -d build/clickety_split_leeloo_micro_rev2_right \
-  -b nice_nano//zmk -- \
+Right half:
+
+~~~bash
+west build -p -d build/leeloo_micro_rev2_right \
+  -b nice_nano_v2 -- \
   -DSHIELD=clickety_split_leeloo_micro_rev2_right
-```
+~~~
 
-## Custom ZMK Configuration
+### Leeloo-Micro Rev2 with Chiisai
 
-Replace `/absolute/path/to/zmk-config/config` with the directory
-containing the custom keymap and configuration files.
+Left half:
 
-### Rev1 example
+~~~bash
+west build -p -d build/leeloo_micro_rev2_chiisai_left \
+  -b clickety_split_chiisai/nrf52840/zmk -- \
+  -DSHIELD=clickety_split_leeloo_micro_rev2_left
+~~~
 
-```bash
-west build -p always -s app \
-  -d build/clickety_split_leeloo_micro_left_custom \
-  -b nice_nano//zmk -- \
-  -DSHIELD=clickety_split_leeloo_micro_left \
-  -DZMK_CONFIG="/absolute/path/to/zmk-config/config"
-```
+Right half:
 
-### Rev2 example
+~~~bash
+west build -p -d build/leeloo_micro_rev2_chiisai_right \
+  -b clickety_split_chiisai/nrf52840/zmk -- \
+  -DSHIELD=clickety_split_leeloo_micro_rev2_right
+~~~
 
-```bash
-west build -p always -s app \
-  -d build/clickety_split_leeloo_micro_rev2_left_custom \
-  -b nice_nano//zmk -- \
-  -DSHIELD=clickety_split_leeloo_micro_rev2_left \
-  -DZMK_CONFIG="/absolute/path/to/zmk-config/config"
-```
+The resulting UF2 file is normally located at:
 
-A custom rev2 configuration should not add the generic nice!view
-adapter shields. The rev2 controller-specific overlay already defines
-the display hardware.
+~~~text
+build/<name>/zephyr/zmk.uf2
+~~~
 
-# Display Support
+Build and flash both halves of the split keyboard.
 
-## Leeloo-Micro v1.0 / rev1
+For Rev1, substitute the applicable left or right target from the
+hardware-revision table.
 
-Rev1 retains the generic ZMK `nice_view_adapter` and `nice_view`
-workflow.
+## Flashing Firmware
 
-The default rev1 keymap source contains a commented display chip-select
-override:
+1. Build firmware for the selected revision, controller, and half.
+2. Put the controller into its UF2 bootloader.
+3. Mount the bootloader storage volume.
+4. Copy the corresponding `zmk.uf2` file to the mounted volume.
+5. Allow the controller to restart.
+6. Repeat the process for the other half.
 
-```text
-clickety_split_leeloo_micro_rev1_keymap.dtsi
-```
+The exact reset sequence depends on the installed controller and keyboard
+hardware. A double reset is commonly used by UF2-capable nRF52840
+controllers.
 
-The override is:
+When moving between materially different shield, controller, or settings
+configurations, flash an appropriate ZMK settings-reset build before returning
+to the normal firmware.
 
-```dts
-nice_view_spi: &spi0 {
-    cs-gpios = <&pro_micro 4 GPIO_ACTIVE_HIGH>;
-};
-```
+## Keymap Resolution
 
-For a custom configuration, place this override in the custom keymap.
+The maintained default keymap files are:
 
-A rev1 build using the generic adapter shields resembles:
+- `clickety_split_leeloo_micro_left.keymap` and
+  `clickety_split_leeloo_micro_right.keymap` for Rev1; both side-specific
+  wrappers include `clickety_split_leeloo_micro_rev1_keymap.dtsi`; and
+- `clickety_split_leeloo_micro_rev2.keymap` for Rev2.
 
-```bash
-west build -p always -s app \
-  -d build/clickety_split_leeloo_micro_left_display \
-  -b nice_nano//zmk -- \
-  -DSHIELD="clickety_split_leeloo_micro_left nice_view_adapter nice_view"
-```
+There is no root `clickety_split_leeloo_micro.keymap` file. Rev1 intentionally
+uses the side-specific wrappers so both halves share the maintained Rev1
+keymap definition.
 
-The equivalent right-half build uses
-`clickety_split_leeloo_micro_right`.
+A user configuration can provide a keymap matching the selected shield target.
+That user keymap is the intended place for layout customization. The
+controller-specific files in this shield change electrical routing and
+hardware configuration; they do not define a personal typing layout.
 
-## Leeloo-Micro v1.1 / rev2
+When diagnosing an unexpected layout, verify:
 
-Rev2 directly defines the Sharp Memory LCD used by the nice!view
-display. The display configuration is owned by the Leeloo-Micro shield
-and does not depend on the generic adapter shields.
+- the selected shield target;
+- the keymap file name in the user configuration;
+- the left and right build entries; and
+- whether a settings reset is required after a major configuration change.
 
-The rev2 nice!nano v2 configuration:
+## Validation Status
 
-- enables SPI0;
-- uses P0.20 for SCK;
-- uses P0.17 for MOSI;
-- uses Pro Micro physical pin 4 for display chip select;
-- configures chip select as active-high;
-- disables the inherited SSD1306 OLED node;
-- disables the inherited Pro Micro I2C bus;
-- enables the Zephyr `sharp,ls0xx` driver;
-- configures a 160 × 68 monochrome display;
-- performs VCOM inversion through the serial protocol;
-- uses the built-in ZMK status screen;
-- blanks the display contents while idle;
-- keeps the display supply enabled independently of RGB power.
+### Build-Validated
 
-The direct display definition is included only for these combinations:
+The current ZMK 4.1 source tree contains the four revision-specific left and
+right Leeloo-Micro shield targets.
 
-```text
-clickety_split_leeloo_micro_rev2_left + nice!nano v2
-clickety_split_leeloo_micro_rev2_right + nice!nano v2
-```
+The migration work build-validates the Rev2 controller-specific configurations
+for:
 
-Rev1 and unrelated shields are unaffected.
+- nice!nano v2;
+- Clickety Split Chiisai;
+- dual Sharp Memory LCD routing;
+- RGB underglow routing; and
+- ZMK `EXT_POWER` integration.
 
-# Leeloo-Micro Rev2 RGB Power Control
+### Generated-Output Validated
 
-## Hardware Arrangement
+Generated Kconfig and Devicetree output were inspected for the Rev2
+controller-specific combinations.
 
-Leeloo-Micro rev2 separates the always-available display supply from the
-switchable RGB LED supply.
+The inspection covered:
 
-```text
-nice!nano P0.13
-    -> controller VCC output
-    -> display supply
-    -> RGB MOSFET source
-
-nice!nano P1.01
-    -> active-low RGB MOSFET gate
-    -> controlled through ZMK EXT_POWER
-
-nice!nano P0.06
-    -> WS2812 data
-```
-
-Each keyboard half contains a chain of 20 GRB LEDs.
-
-P0.13 is configured as an output-high GPIO hog. It remains asserted so
-the display supply remains available during normal operation.
-
-ZMK's generic external-power device is redirected to P1.01:
-
-```text
-RGB enabled
-    -> P1.01 low
-    -> MOSFET enabled
-    -> RGB rail powered
-
-RGB disabled
-    -> P1.01 high
-    -> MOSFET disabled
-    -> RGB rail unpowered
-```
-
-This allows `RGB_ON`, `RGB_OFF`, and `RGB_TOG` to control the RGB rail
-without switching off the display supply.
-
-## ZMK Configuration
-
-The rev2 nice!nano v2 controller configuration enables:
-
-```conf
-CONFIG_ZMK_RGB_UNDERGLOW=y
-CONFIG_ZMK_RGB_UNDERGLOW_EXT_POWER=y
-CONFIG_ZMK_RGB_UNDERGLOW_ON_START=n
-
-CONFIG_ZMK_RGB_UNDERGLOW_BRT_MAX=10
-CONFIG_ZMK_RGB_UNDERGLOW_BRT_START=10
-```
-
-RGB is configured to begin disabled when using fresh/default settings.
-
-The maximum and initial brightness are deliberately restricted to 10
-during initial hardware validation. These values may be revisited after
-electrical, thermal, battery, and visual testing.
-
-The default rev2 keymap defines controls for:
-
-- RGB on;
-- RGB off;
-- RGB toggle;
-- effect selection;
-- hue adjustment;
-- saturation adjustment;
-- brightness adjustment.
-
-Refer to `clickety_split_leeloo_micro_rev2.keymap` for the exact default
-positions.
-
-# Compatibility Status
-
-The rev2 RGB implementation uses ZMK's generic EXT_POWER support as a
-temporary compatibility mechanism for the active-low RGB MOSFET.
-
-It does not restore or reproduce the earlier ZMK power-domain subsystem.
-No custom application driver is required.
-
-The implementation is intentionally isolated to the Leeloo-Micro rev2
-nice!nano v2 controller-specific files. It does not alter:
-
-- Leeloo-Micro rev1;
-- unrelated Clickety Split shields;
-- other controller boards;
-- the underlying Sharp display driver;
-- ZMK's generic display subsystem.
-
-A future upstream power-domain or power-sequencing solution may replace
-this compatibility arrangement while retaining the same hardware
-behaviour.
-
-# Validation Status
-
-## Build-validated
-
-The following have been confirmed through clean ZMK 4.1 builds and
-generated configuration inspection:
-
-- all four Leeloo-Micro targets build successfully;
-- rev1 left and right retain their original firmware output;
-- rev1 and rev2 resolve to their intended default keymaps;
-- rev2 enables the Sharp display driver;
-- rev2 uses SPI0 P0.20/P0.17 and Pro Micro pin 4;
-- the inherited OLED node and I2C bus are disabled for rev2 nice!nano v2;
-- P0.13 is generated as an output-high GPIO hog;
-- EXT_POWER is generated on active-low P1.01;
-- P0.06 is generated as the WS2812 SPI output;
-- each rev2 half is generated with a 20-LED GRB chain;
-- the RGB and display topologies coexist in the generated Devicetree.
-
-## Physical validation still required
-
-The following must be confirmed on Leeloo-Micro rev2 hardware:
-
-- left and right keyboard matrices;
-- rotary-encoder direction and resolution;
-- wired USB HID;
-- Bluetooth HID;
-- split central/peripheral communication;
-- reconnect and bonding behaviour;
-- direct Sharp display operation;
-- display content orientation;
-- layer and Bluetooth status display;
-- display blanking and wake behaviour;
-- RGB on, off, and toggle controls;
-- effect, colour, saturation, and brightness controls;
-- display operation while RGB power is disabled;
-- RGB settings persistence;
-- complete power-down and cold-start recovery;
-- absence of a visible RGB startup flash;
-- battery consumption with RGB enabled and disabled.
-
-The configuration requests that RGB begin disabled. This expected boot
-behaviour must still be confirmed after a ZMK settings reset and repeated
-cold starts.
-
-An oscilloscope or logic analyser would be required to prove the absence
-of an extremely short electrical transition that is not visibly
-observable.
-
-# Keymap Resolution
-
-The shield directory intentionally does not contain a generic:
-
-```text
-clickety_split_leeloo_micro.keymap
-```
-
-A generic folder-level keymap would be selected before the
-revision-specific rev2 keymap and would shadow it.
-
-The default keymaps are organized as follows:
-
-```text
-clickety_split_leeloo_micro_left.keymap
-    -> includes clickety_split_leeloo_micro_rev1_keymap.dtsi
-
-clickety_split_leeloo_micro_right.keymap
-    -> includes clickety_split_leeloo_micro_rev1_keymap.dtsi
-
-clickety_split_leeloo_micro_rev2_left
-    -> uses clickety_split_leeloo_micro_rev2.keymap
-
-clickety_split_leeloo_micro_rev2_right
-    -> uses clickety_split_leeloo_micro_rev2.keymap
-```
-
-This allows each hardware revision to receive its intended layout while
-both halves share the appropriate revision-level keymap source.
-
-# Support
-
-For questions about Leeloo-Micro, please
+- shield and controller selection;
+- split-half configuration;
+- inherited OLED-node replacement;
+- Sharp display routing;
+- WS2812 data routing;
+- active-low RGB MOSFET control;
+- controller VCC behavior;
+- ZMK `EXT_POWER` assignment; and
+- controller-specific GPIO separation.
+
+### Physically Validated
+
+#### Rev2 with nice!nano v2
+
+Leeloo-Micro v1.1 / Rev2 with nice!nano v2 was physically validated for:
+
+- keyboard operation;
+- split communication;
+- both Sharp displays;
+- RGB underglow operation;
+- RGB settings persistence across power cycles; and
+- normal startup and use during the completed functional checkpoint.
+
+#### Rev2 with Clickety Split Chiisai
+
+Leeloo-Micro v1.1 / Rev2 with Chiisai was physically validated for:
+
+- keyboard input;
+- split communication;
+- both Sharp LS011B7DH03 160 × 68 Memory LCD displays;
+- correctly resolved display status information;
+- RGB underglow operation; and
+- operation with the maintained ZMK 4.1 integration.
+
+Physical validation applies only to the stated revision, controller, and
+tested functions.
+
+### Longer-Term Validation
+
+The following remain useful follow-up checks:
+
+- formal battery-endurance measurement;
+- repeated long-duration sleep and wake cycling;
+- extended Bluetooth reconnect testing under varied host conditions; and
+- longer-term reliability testing across both validated controller
+  combinations.
+
+These follow-up items do not invalidate the completed functional checkpoints.
+
+## Compatibility and Limitations
+
+- Use the shield target matching the physical Leeloo-Micro revision.
+- Do not apply the Rev2 MOSFET compatibility configuration to Rev1.
+- Rev2 display and RGB routing depends on the installed controller.
+- Do not add `nice_view` or `nice_view_adapter` to the controller-specific
+  Rev2 builds.
+- nice!nano v2 Rev2 uses P0.13 for controller VCC, P1.01 for the active-low
+  MOSFET gate, and P0.06 for WS2812 data.
+- Chiisai Rev2 uses P0.06 for regulator and VCC behavior, rear P0.08 for the
+  active-low MOSFET gate, and P1.09 for WS2812 data.
+- Chiisai Rev2 RGB control requires a physical bodge connection to rear P0.08.
+- P1.01 / D18 is not the Chiisai MOSFET route.
+- The Rev2 ZMK `EXT_POWER` handling remains a temporary compatibility solution
+  until appropriate upstream power-domain support is available.
+- Physical validation of one revision and controller does not automatically
+  validate other combinations.
+- Rev1 remains supported in source but is outside the current Rev2 physical
+  validation claims.
+
+## Migration Notes
+
+The ZMK 4.1 migration preserves established Leeloo-Micro hardware behavior
+while moving the shields to consistently prefixed public names.
+
+Intentional decisions include:
+
+- retaining separate Rev1 and Rev2 targets;
+- keeping shared matrix behavior separate from controller-specific routing;
+- retaining Rev1 OLED support;
+- replacing the inherited OLED node with explicit Sharp Memory LCD routes for
+  Rev2 controllers;
+- keeping the display supply available while independently switching Rev2 RGB;
+- limiting the temporary MOSFET compatibility configuration to Rev2;
+- preserving ZMK settings behavior and RGB persistence;
+- keeping Chiisai-specific routing inside the Leeloo-Micro shield; and
+- distinguishing build, generated-output, and physical validation.
+
+The temporary Rev2 compatibility implementation is documented in the README,
+controller-specific configuration files, and Devicetree overlays so that its
+purpose and replacement boundary remain clear.
+
+## Support
+
+For questions about this hardware, please
 [contact Clickety Split](https://clicketysplit.ca/pages/contact-us).
 
-Clickety Split
-For the love of split keyboards.
-
-## Clickety Split Chiisai support for rev2
-
-Leeloo-Micro v1.1/rev2 supports the Clickety Split Chiisai controller
-without the `nice_view` or `nice_view_adapter` shields.
-
-The Leeloo-Micro shield owns this integration. Chiisai remains a generic
-Pro Micro-compatible controller and does not contain keyboard-specific
-display definitions.
-
-### Build targets
-
-Use the standard rev2 shield targets with the Chiisai board target:
-
-- `clickety_split_leeloo_micro_rev2_left`
-- `clickety_split_leeloo_micro_rev2_right`
-- board: `clickety_split_chiisai//zmk`
-
-The board-specific configuration and overlay files are loaded
-automatically from the corresponding target directories.
-
-### Display routing
-
-The Sharp LS011B7DH03 160 × 68 Memory LCD uses:
-
-- Pro Micro D2 / Chiisai P1.12 for SPI MOSI;
-- Pro Micro D3 / Chiisai P1.13 for SPI SCK;
-- Pro Micro D4 / Chiisai P1.14 for active-high chip select.
-
-The inherited SSD1306 OLED node and I2C0 are disabled. SPI0 is used for
-the Sharp display.
-
-Chiisai's existing `EXT_POWER` output remains on P0.06, active high.
-The display integration does not redirect that signal to the
-nice!nano-specific P1.01 MOSFET gate.
-
-### Validation
-
-Compile-time validation confirmed:
-
-- automatic controller-specific overlay and configuration discovery;
-- left USB/Bluetooth split-central firmware;
-- right Bluetooth split-peripheral firmware;
-- Sharp LS0XX as the selected display driver;
-- 160 × 68 one-bit LVGL configuration;
-- the expected Chiisai SPI and chip-select routing;
-- absence of the inherited SSD1306 driver;
-- absence of WS2812 and RGB underglow support.
-
-Physical testing on July 18, 2026 confirmed:
-
-- the keyboard types successfully;
-- both split halves communicate;
-- both Sharp displays initialize;
-- both displays render detailed, correctly resolved status information.
-
-This physical checkpoint does not claim complete validation of every
-optional encoder, idle/sleep, battery, or long-term reliability
-scenario unless separately recorded.
-
-### RGB validation boundary
-
-RGB is intentionally disabled in the Chiisai rev2 configuration.
-
-The historical Chiisai RGB-data route and Leeloo-Micro rev2 MOSFET
-power behavior will be handled in a separate validation phase. Display
-and keyboard functionality should remain independently recoverable
-while that work is evaluated.
+**Clickety Split** — For the love of split keyboards.
