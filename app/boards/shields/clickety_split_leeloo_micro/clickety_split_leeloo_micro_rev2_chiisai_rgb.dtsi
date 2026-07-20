@@ -71,12 +71,17 @@
  * This preserves VCC for the display and the source side of the RGB MOSFET
  * independently of the RGB on/off state.
  */
-&gpio0 {
-    chiisai_vcc_enable: chiisai-vcc-enable {
-        gpio-hog;
-        gpios = <6 GPIO_ACTIVE_HIGH>;
-        output-high;
-        line-name = "chiisai-vcc-enable";
+/ {
+    /*
+     * Keep Chiisai VCC available during active use and ordinary ZMK idle.
+     * Device PM disables P0.06 immediately before deep sleep, allowing the
+     * TPS79333-EP output and attached Sharp Memory LCD supply to shut down.
+     */
+    chiisai_vcc_rail: chiisai-vcc-rail {
+        compatible = "zmk,pm-gpio-rail";
+        enable-gpios = <&gpio0 6 GPIO_ACTIVE_HIGH>;
+        init-delay-ms = <50>;
+        status = "okay";
     };
 };
 
