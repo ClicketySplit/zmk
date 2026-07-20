@@ -8,7 +8,8 @@
  *
  *   P0.13 active-high:
  *       nice!nano VCC output supplying the optional display and the source
- *       side of the RGB MOSFET. This output remains enabled continuously.
+ *       side of the RGB MOSFET. It remains enabled during normal operation
+      and ordinary idle, then is disabled before deep sleep.
  *
  *   P1.01 active-low:
  *       RGB MOSFET gate. ZMK EXT_POWER controls this GPIO so RGB_ON,
@@ -46,18 +47,20 @@
     };
 };
 
-/*
- * Keep the nice!nano VCC output asserted continuously.
- *
- * This supplies the optional display and the source side of the RGB MOSFET.
- * RGB power is switched independently through the MOSFET gate on P1.01.
- */
-&gpio0 {
-    leeloo_micro_vcc_enable: leeloo-micro-vcc-enable {
-        gpio-hog;
-        gpios = <13 GPIO_ACTIVE_HIGH>;
-        output-high;
-        line-name = "leeloo-micro-vcc-enable";
+/ {
+    /*
+     * Keep the nice!nano VCC/display rail enabled during normal operation and
+     * ordinary idle. Device PM disables P0.13 before deep sleep so the
+     * attached Sharp Memory LCD supply can power down.
+     *
+     * RGB power remains independently switched through the active-low MOSFET
+     * gate on P1.01 via ZMK EXT_POWER.
+     */
+    leeloo_micro_vcc_rail: leeloo-micro-vcc-rail {
+        compatible = "zmk,pm-gpio-rail";
+        enable-gpios = <&gpio0 13 GPIO_ACTIVE_HIGH>;
+        init-delay-ms = <50>;
+        status = "okay";
     };
 };
 
