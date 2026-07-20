@@ -12,7 +12,8 @@
  *   Chiisai P0.06 active-high:
  *       Enables the onboard TPS79333-EP LDO. The resulting VCC rail powers
  *       the Sharp display and the source side of Leeloo's RGB MOSFET.
- *       P0.06 must remain asserted independently of RGB state.
+ *       P0.06 remains asserted during normal operation and ordinary idle,
+ *       independently of RGB state, and is disabled before deep sleep.
  *
  *   Chiisai rear P0.08 active-low:
  *       Connect to the Leeloo RGB MOSFET gate with a bodge wire.
@@ -59,13 +60,20 @@
  * Keep the Chiisai TPS79333-EP LDO enabled continuously so the display and
  * MOSFET source supply remain powered while the RGB rail is switched off.
  */
-&gpio0 {
-    leeloo_rev3_chiisai_vcc_enable:
-        leeloo-rev3-chiisai-vcc-enable {
-        gpio-hog;
-        gpios = <6 GPIO_ACTIVE_HIGH>;
-        output-high;
-        line-name = "leeloo-rev3-chiisai-vcc-enable";
+/ {
+    /*
+     * Keep the Chiisai TPS79333-EP / VCC / display rail enabled during
+     * normal operation and ordinary idle. Device PM disables P0.06 before
+     * deep sleep so the attached Sharp Memory LCD supply can power down.
+     *
+     * RGB power remains independently switched through the active-low
+     * Leeloo MOSFET gate on rear GPIO P0.08 via ZMK EXT_POWER.
+     */
+    leeloo_rev3_chiisai_vcc_rail: leeloo-rev3-chiisai-vcc-rail {
+        compatible = "zmk,pm-gpio-rail";
+        enable-gpios = <&gpio0 6 GPIO_ACTIVE_HIGH>;
+        init-delay-ms = <50>;
+        status = "okay";
     };
 };
 

@@ -5,8 +5,8 @@
  * Temporary Leeloo rev3 compatibility configuration.
  *
  * The nice!nano v2 VCC output on P0.13 supplies both the display and the
- * source of the RGB MOSFET. Keep P0.13 asserted so the display remains
- * powered independently of RGB state.
+ * source of the RGB MOSFET. It remains enabled during normal operation
+ * and ordinary idle, then is disabled before deep sleep.
  *
  * Redirect ZMK's EXT_POWER device to the active-low RGB MOSFET gate on
  * P1.01. This allows RGB_ON, RGB_OFF, and RGB_TOG to switch the RGB rail
@@ -40,18 +40,20 @@
     };
 };
 
-/*
- * Keep the nice!nano v2 VCC output enabled continuously.
- *
- * This preserves power to the nice!view display and to the source side of
- * the Leeloo rev3 RGB MOSFET. RGB rail switching occurs separately on P1.01.
- */
-&gpio0 {
-    leeloo_vcc_enable: leeloo-vcc-enable {
-        gpio-hog;
-        gpios = <13 GPIO_ACTIVE_HIGH>;
-        output-high;
-        line-name = "leeloo-vcc-enable";
+/ {
+    /*
+     * Keep the nice!nano VCC/display rail enabled during normal operation and
+     * ordinary idle. Device PM disables P0.13 before deep sleep so the
+     * attached Sharp Memory LCD supply can power down.
+     *
+     * RGB power remains independently switched through the active-low
+     * Leeloo MOSFET gate on P1.01 via ZMK EXT_POWER.
+     */
+    leeloo_vcc_rail: leeloo-vcc-rail {
+        compatible = "zmk,pm-gpio-rail";
+        enable-gpios = <&gpio0 13 GPIO_ACTIVE_HIGH>;
+        init-delay-ms = <50>;
+        status = "okay";
     };
 };
 
