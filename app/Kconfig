@@ -419,6 +419,14 @@ config ZMK_IDLE_SLEEP_TIMEOUT
 
 endif # ZMK_SLEEP
 
+config ZMK_PM_GPIO_RAIL
+    bool
+    default y if DT_HAS_ZMK_PM_GPIO_RAIL_ENABLED
+    help
+      Enable a GPIO-controlled rail that remains active during normal
+      operation and ordinary idle, but is disabled by Zephyr device power
+      management immediately before ZMK enters deep sleep.
+
 config ZMK_EXT_POWER
     bool "Enable support to control external power output"
 
