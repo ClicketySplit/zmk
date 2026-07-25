@@ -393,3 +393,38 @@ For questions about this hardware, please
 [contact Clickety Split](https://clicketysplit.ca/pages/contact-us).
 
 **Clickety Split** — For the love of split keyboards.
+
+<!-- BEGIN CLICKETY SPLIT PM-AWARE VCC RAIL -->
+## PM-aware display and RGB power
+
+Leeloo-Micro v1.1/rev2 uses controller-specific power routing for its direct
+Sharp LS011B7DH03 nice!view displays and RGB underglow.
+
+| Controller | Display/VCC rail | RGB gate | WS2812 data | LEDs |
+| --- | --- | --- | --- | ---: |
+| Clickety Split Chiisai | P0.06, active high | P0.08, active low | P1.09 / TX0 | 20 per half |
+| nice!nano v2 | P0.13, active high | P1.01, active low | P0.06 | 20 per half |
+
+The shield-owned `zmk,pm-gpio-rail` device keeps the display/VCC rail enabled
+during active use and ordinary idle, then turns it off during ZMK deep sleep.
+RGB power remains independently controlled through ZMK `EXT_POWER`.
+
+```conf
+CONFIG_ZMK_SLEEP=y
+CONFIG_ZMK_IDLE_SLEEP_TIMEOUT=1800000
+```
+
+ZMK derives `CONFIG_ZMK_PM_DEVICE_SUSPEND_RESUME`; do not assign that hidden
+symbol directly. The direct display integration is owned by the keyboard
+shield, so do not add the `nice_view` or `nice_view_adapter` shield.
+
+### Validation status
+
+| Controller | Generated build | Two-minute physical test | 30-minute production test |
+| --- | --- | --- | --- |
+| Clickety Split Chiisai | Passed | Passed | Passed |
+| nice!nano v2 | Passed | Passed | Not separately recorded |
+
+On tested hardware, wake restored both displays and RGB enabled/disabled state,
+colour, brightness, and saturation.
+<!-- END CLICKETY SPLIT PM-AWARE VCC RAIL -->
