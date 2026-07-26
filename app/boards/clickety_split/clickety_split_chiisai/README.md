@@ -1,13 +1,13 @@
 # Clickety Split | Chiisai
 
-- **Designed by:** [Clickety Split](https://clicketysplit.ca)
+- **Designed by:** [Clickety Split Ltd.](https://clicketysplit.ca)
 - **Website:** [clicketysplit.ca](https://clicketysplit.ca)
 - **GitHub:** [ClicketySplit](https://github.com/ClicketySplit)
 
 ## Overview
 
 Chiisai v1.13 is a Pro Micro-compatible wireless keyboard controller designed
-by Clickety Split. It is based on the Nordic Semiconductor nRF52840 and
+by Clickety Split Ltd. It is based on the Nordic Semiconductor nRF52840 and
 supports ZMK firmware over USB and Bluetooth Low Energy.
 
 The ZMK 4.1 board definition preserves the proven hardware behavior of the

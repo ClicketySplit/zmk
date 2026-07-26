@@ -1,12 +1,12 @@
 # Clickety Split | Pepito
 
-- **Designed by:** [Clickety Split](https://clicketysplit.ca)
+- **Designed by:** [Clickety Split Ltd.](https://clicketysplit.ca)
 - **Website:** [clicketysplit.ca](https://clicketysplit.ca)
 - **GitHub:** [ClicketySplit](https://github.com/ClicketySplit)
 
 ## Overview
 
-Pepito is a wireless 3×6+4 split keyboard designed by Clickety Split.
+Pepito is a wireless 3×6+4 split keyboard designed by Clickety Split Ltd.
 The current shield supports Pepito v1.13 on ZMK 4.1 using one Seeed
 Studio XIAO nRF52840 controller on each half.
 

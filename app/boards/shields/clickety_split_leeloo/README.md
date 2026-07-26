@@ -1,12 +1,12 @@
 # Clickety Split | Leeloo
 
-- **Designed by:** [Clickety Split](https://clicketysplit.ca)
+- **Designed by:** [Clickety Split Ltd.](https://clicketysplit.ca)
 - **Website:** [clicketysplit.ca](https://clicketysplit.ca)
 - **GitHub:** [ClicketySplit](https://github.com/ClicketySplit)
 
 ## Overview
 
-Leeloo is a family of split ergonomic keyboards designed by Clickety Split.
+Leeloo is a family of split ergonomic keyboards designed by Clickety Split Ltd.
 The ZMK shield definitions support the original Leeloo, Leeloo v2, and
 Leeloo v2.1 hardware generations.
 

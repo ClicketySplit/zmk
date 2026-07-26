@@ -1,13 +1,13 @@
 # Clickety Split | Leeloo-Micro
 
-- **Designed by:** [Clickety Split](https://clicketysplit.ca)
+- **Designed by:** [Clickety Split Ltd.](https://clicketysplit.ca)
 - **Website:** [clicketysplit.ca](https://clicketysplit.ca)
 - **GitHub:** [ClicketySplit](https://github.com/ClicketySplit)
 
 ## Overview
 
 Leeloo-Micro is a compact split ergonomic keyboard family designed by
-Clickety Split. The current ZMK shield definitions support the original
+Clickety Split Ltd. The current ZMK shield definitions support the original
 Leeloo-Micro v1.0 hardware and Leeloo-Micro v1.1.
 
 The source tree keeps revision-specific shield targets separate and provides
