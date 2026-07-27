@@ -8,12 +8,11 @@
 #include <dt-bindings/zmk/bt.h>
 
 // Layers
-#define QW_M    0       // Main
-#define QW_L    1       // Lower
-#define QW_R    2       // Raise
-#define QW_A    3       // Adjust
-
-#define QC_F    4       // Firmware
+#define QW_M    0   // Main
+#define QW_L    1   // Lower
+#define QW_R    2   // Raise
+#define QW_A    3   // Adjust
+#define QC_F    4   // Firmware
 
 
 // Short versions
