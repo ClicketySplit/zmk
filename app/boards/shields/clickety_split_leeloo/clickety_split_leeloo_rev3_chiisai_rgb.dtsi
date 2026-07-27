@@ -50,15 +50,19 @@
 
         /*
          * Preserve Chiisai's established conservative enable delay.
-         * Physical RGB sequencing remains a hardware-validation item.
+         * Physical testing confirmed normal startup and RGB operation.
+         * The 30-minute production sleep/wake test also passed.
+         * Electrical rail waveforms were not oscilloscope-verified.
          */
         init-delay-ms = <50>;
     };
 };
 
 /*
- * Keep the Chiisai TPS79333-EP LDO enabled continuously so the display and
- * MOSFET source supply remain powered while the RGB rail is switched off.
+ * The PM-aware GPIO rail keeps the Chiisai TPS79333-EP LDO enabled during
+ * normal operation and ordinary idle so the display and MOSFET source
+ * remain powered. Device PM disables the rail before deep sleep and
+ * restores it on wake.
  */
 / {
     /*

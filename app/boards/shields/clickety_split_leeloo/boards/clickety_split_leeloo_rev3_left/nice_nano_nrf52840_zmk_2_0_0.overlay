@@ -2,18 +2,21 @@
  * Copyright (c) 2026 Clickety Split Ltd.
  * SPDX-License-Identifier: MIT
  *
- * Temporary Leeloo rev3 compatibility configuration.
+ * Leeloo rev3 PM-aware display/VCC and RGB power configuration.
  *
  * The nice!nano v2 VCC output on P0.13 supplies both the display and the
- * source of the RGB MOSFET. It remains enabled during normal operation
- * and ordinary idle, then is disabled before deep sleep.
+ * source of the RGB MOSFET. The PM-aware GPIO rail keeps P0.13 enabled
+ * during normal operation and ordinary idle, then disables it before deep
+ * sleep and restores it on wake.
  *
- * Redirect ZMK's EXT_POWER device to the active-low RGB MOSFET gate on
- * P1.01. This allows RGB_ON, RGB_OFF, and RGB_TOG to switch the RGB rail
- * without switching off the display.
+ * ZMK EXT_POWER is redirected to the active-low RGB MOSFET gate on P1.01.
+ * This allows RGB_ON, RGB_OFF, and RGB_TOG to switch the RGB rail without
+ * switching off the display during active use.
  *
- * Known temporary limitations include possible RGB rail activation during
- * startup or resume and imperfect black-frame/power-off sequencing.
+ * Physical testing found no visible RGB flash during startup, wake, or rapid
+ * reset presses. The display powered down cleanly for deep sleep and
+ * restored on wake without retained images or visible artifacts. Electrical
+ * rail waveforms were not oscilloscope-verified.
  */
 
 #include <dt-bindings/gpio/gpio.h>

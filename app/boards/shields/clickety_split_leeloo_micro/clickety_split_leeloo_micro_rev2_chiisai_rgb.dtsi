@@ -16,7 +16,9 @@
  *
  *       The LDO output supplies Chiisai VCC through BAT54 protection. VCC
  *       powers the Sharp display and the source side of the keyboard RGB
- *       MOSFET. P0.06 must therefore remain asserted continuously.
+ *       MOSFET. The PM-aware GPIO rail keeps P0.06 asserted during normal
+ *       operation and ordinary idle, then releases it before deep sleep
+ *       and restores it on wake.
  *
  *   Chiisai rear pad P0.08 active-low:
  *       Connect to the Leeloo-Micro RGB MOSFET gate using a bodge wire.
@@ -58,18 +60,27 @@
 
         /*
          * Preserve Chiisai's established conservative enable delay.
-         * Physical RGB sequencing remains a hardware-validation item.
+         * Physical testing confirmed normal startup and RGB operation.
+         * The 30-minute production sleep/wake test also passed.
+         * Electrical rail waveforms were not oscilloscope-verified.
          */
         init-delay-ms = <50>;
     };
 };
 
 /*
- * Keep the Chiisai TPS79333-EP LDO enabled continuously.
+ * The PM-aware GPIO rail keeps the Chiisai TPS79333-EP LDO enabled during
+ * normal operation and ordinary idle.
  *
- * Once EXT_POWER is redirected to P0.08, P0.06 is asserted as a GPIO hog.
- * This preserves VCC for the display and the source side of the RGB MOSFET
- * independently of the RGB on/off state.
+ * After ZMK EXT_POWER is redirected to P0.08, P0.06 independently supplies
+ * VCC for the display and the source side of the RGB MOSFET. Device PM
+ * releases P0.06 before deep sleep and restores it on wake. The resistor
+ * to ground provides the intended discharge path for the Chiisai
+ * stabilization capacitor after the display/VCC rail turns off.
+ *
+ * Physical testing found clean display shutdown with no retained image or
+ * visible artifact. The discharge behaviour is electrically consistent
+ * with the design but was not oscilloscope-verified.
  */
 / {
     /*
