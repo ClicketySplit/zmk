@@ -1,11 +1,6 @@
 /*
  * Copyright (c) 2026 Clickety Split Ltd.
  * SPDX-License-Identifier: MIT
- *
- * Leeloo-Micro v1.1/rev2 nice!nano v2 Sharp memory-in-pixel display.
- *
- * This definition is owned by the Leeloo-Micro shield and intentionally
- * does not depend on the nice_view or nice_view_adapter shields.
  */
 
 #include <dt-bindings/gpio/gpio.h>
@@ -40,12 +35,9 @@
 };
 
 /*
- * SPI0 and I2C0 are alternate personalities of the same nRF52840
- * peripheral.
- *
  * The Leeloo-Micro base DTSI includes an SSD1306 OLED on pro_micro_i2c.
  * Disable both the OLED child and its bus before configuring peripheral
- * zero as the Sharp MIP display SPI bus.
+ * zero as the MIP display SPI bus.
  */
 &oled {
     status = "disabled";
@@ -63,9 +55,6 @@
     pinctrl-1 = <&leeloo_micro_mip_spi0_sleep>;
     pinctrl-names = "default", "sleep";
 
-    /*
-     * Leeloo-Micro routes display chip select to Pro Micro physical pin 4.
-     */
     cs-gpios = <&pro_micro 4 GPIO_ACTIVE_HIGH>;
 
     leeloo_micro_mip: ls0xx@0 {
@@ -78,10 +67,6 @@
         width = <160>;
         height = <68>;
 
-        /*
-         * VCOM inversion is performed through the serial protocol.
-         * The interval matches the standard ZMK nice!view definition.
-         */
         serial-vcom-inversion;
         serial-vcom-interval = <33>;
     };
