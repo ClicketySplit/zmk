@@ -1,7 +1,5 @@
-#
 # Copyright (c) 2025 The ZMK Contributors
 # SPDX-License-Identifier: MIT
-#
 
 # Suppress duplicate unit-address warnings for overlapping Nordic peripherals.
 # https://docs.zephyrproject.org/latest/build/dts/intro-input-output.html
