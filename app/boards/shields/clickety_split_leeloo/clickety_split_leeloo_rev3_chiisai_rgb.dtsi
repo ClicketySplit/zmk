@@ -1,29 +1,6 @@
 /*
  * Copyright (c) 2026 Clickety Split Ltd.
  * SPDX-License-Identifier: MIT
- *
- * Leeloo v2.1/rev3 + Clickety Split Chiisai RGB integration.
- *
- * This controller-specific definition is owned by the Leeloo shield.
- * Chiisai remains a generic Pro Micro-compatible controller.
- *
- * Hardware arrangement:
- *
- *   Chiisai P0.06 active-high:
- *       Enables the onboard TPS79333-EP LDO. The resulting VCC rail powers
- *       the Sharp display and the source side of Leeloo's RGB MOSFET.
- *       P0.06 remains asserted during normal operation and ordinary idle,
- *       independently of RGB state, and is disabled before deep sleep.
- *
- *   Chiisai rear P0.08 active-low:
- *       Connect to the Leeloo RGB MOSFET gate with a bodge wire.
- *       ZMK EXT_POWER controls this GPIO.
- *
- *   Pro Micro TX0 / Arduino D1 / Chiisai P1.09:
- *       WS2812 SPI data output.
- *
- * P0.08 was selected after a source-level collision audit. P0.04 remains
- * available for possible future analog use, and P0.12 remains a spare.
  */
 
 #include <dt-bindings/gpio/gpio.h>
@@ -35,43 +12,25 @@
         zmk,underglow = &led_strip;
     };
 
-    /*
-     * Override Chiisai's board-level EXT_POWER assignment.
-     *
-     * Generic Chiisai:
-     *     P0.06 active-high -> onboard TPS79333-EP LDO enable
-     *
-     * Leeloo rev3 + Chiisai:
-     *     P0.08 active-low -> keyboard RGB MOSFET gate
-     */
     EXT_POWER {
         compatible = "zmk,ext-power-generic";
         control-gpios = <&gpio0 8 GPIO_ACTIVE_LOW>;
 
-        /*
-         * Preserve Chiisai's established conservative enable delay.
-         * Physical testing confirmed normal startup and RGB operation.
-         * The 30-minute production sleep/wake test also passed.
-         * Electrical rail waveforms were not oscilloscope-verified.
-         */
         init-delay-ms = <50>;
     };
 };
 
 /*
- * The PM-aware GPIO rail keeps the Chiisai TPS79333-EP LDO enabled during
- * normal operation and ordinary idle so the display and MOSFET source
- * remain powered. Device PM disables the rail before deep sleep and
- * restores it on wake.
+ * The PM-aware GPIO rail keeps the Chiisai LDO enabled during
+ * normal operation and ordinary idle.
+ *
+ * After ZMK EXT_POWER is redirected to P0.08, P0.06 independently supplies
+ * VCC for the display and the source side of the RGB MOSFET. Device PM
+ * releases P0.06 before deep sleep and restores it on wake.
  */
 / {
     /*
-     * Keep the Chiisai TPS79333-EP / VCC / display rail enabled during
-     * normal operation and ordinary idle. Device PM disables P0.06 before
-     * deep sleep so the attached Sharp Memory LCD supply can power down.
-     *
-     * RGB power remains independently switched through the active-low
-     * Leeloo MOSFET gate on rear GPIO P0.08 via ZMK EXT_POWER.
+     * Keep Chiisai VCC available during active use and ordinary ZMK idle.
      */
     leeloo_rev3_chiisai_vcc_rail: leeloo-rev3-chiisai-vcc-rail {
         compatible = "zmk,pm-gpio-rail";
@@ -85,7 +44,6 @@
     leeloo_rev3_chiisai_spi3_default:
         leeloo_rev3_chiisai_spi3_default {
         group1 {
-            /* Pro Micro TX0 / Arduino D1 maps to Chiisai P1.09. */
             psels = <NRF_PSEL(SPIM_MOSI, 1, 9)>;
         };
     };
@@ -114,7 +72,6 @@
         reg = <0>;
         spi-max-frequency = <4000000>;
 
-        /* Leeloo v2.1/rev3 contains 29 GRB LEDs per half. */
         chain-length = <29>;
         spi-one-frame = <0x70>;
         spi-zero-frame = <0x40>;

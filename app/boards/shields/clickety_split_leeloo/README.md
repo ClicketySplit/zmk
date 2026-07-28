@@ -48,7 +48,8 @@ firmware to each half:
   configuration without adding a separate display shield.
 - The current Chiisai RGB configuration requires the documented hardware
   connection described in the matching build guide.
-- Leeloo Rev3 with Chiisai is physically validated.
+- Leeloo Rev3 with Chiisai is physically validated, including direct
+  displays, RGB operation, sleep and wake behaviour.
 
 ## More Information
 

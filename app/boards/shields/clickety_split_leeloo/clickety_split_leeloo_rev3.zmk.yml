@@ -2,7 +2,7 @@ file_format: "1"
 id: clickety_split_leeloo_rev3
 name: Leeloo v2.1
 type: shield
-url: https://clicketysplit.ca/pages/leeloo
+url: https://clicketysplit.ca/pages/firmware-builds-leeloo
 requires: [pro_micro]
 exposes: [i2c_oled]
 features:

@@ -1,10 +1,6 @@
 /*
  * Copyright (c) 2026 Clickety Split Ltd.
  * SPDX-License-Identifier: MIT
- *
- * Leeloo v2.1/rev3 left + Clickety Split Chiisai.
- *
- * The shield owns this controller integration. Chiisai remains generic.
  */
 
 #include "../../clickety_split_leeloo_rev3_chiisai_rgb.dtsi"

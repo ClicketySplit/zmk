@@ -1,22 +1,6 @@
 /*
  * Copyright (c) 2026 Clickety Split Ltd.
  * SPDX-License-Identifier: MIT
- *
- * Leeloo rev3 PM-aware display/VCC and RGB power configuration.
- *
- * The nice!nano v2 VCC output on P0.13 supplies both the display and the
- * source of the RGB MOSFET. The PM-aware GPIO rail keeps P0.13 enabled
- * during normal operation and ordinary idle, then disables it before deep
- * sleep and restores it on wake.
- *
- * ZMK EXT_POWER is redirected to the active-low RGB MOSFET gate on P1.01.
- * This allows RGB_ON, RGB_OFF, and RGB_TOG to switch the RGB rail without
- * switching off the display during active use.
- *
- * Physical testing found no visible RGB flash during startup, wake, or rapid
- * reset presses. The display powered down cleanly for deep sleep and
- * restored on wake without retained images or visible artifacts. Electrical
- * rail waveforms were not oscilloscope-verified.
  */
 
 #include <dt-bindings/gpio/gpio.h>
@@ -27,15 +11,6 @@
         zmk,underglow = &led_strip;
     };
 
-    /*
-     * Override the nice!nano v2 EXT_POWER node.
-     *
-     * Default nice!nano wiring:
-     *     P0.13 active-high -> controller VCC output
-     *
-     * Leeloo rev3 temporary compatibility wiring:
-     *     P1.01 active-low -> RGB MOSFET gate
-     */
     EXT_POWER {
         compatible = "zmk,ext-power-generic";
         control-gpios = <&gpio1 1 GPIO_ACTIVE_LOW>;
@@ -44,14 +19,6 @@
 };
 
 / {
-    /*
-     * Keep the nice!nano VCC/display rail enabled during normal operation and
-     * ordinary idle. Device PM disables P0.13 before deep sleep so the
-     * attached Sharp Memory LCD supply can power down.
-     *
-     * RGB power remains independently switched through the active-low
-     * Leeloo MOSFET gate on P1.01 via ZMK EXT_POWER.
-     */
     leeloo_vcc_rail: leeloo-vcc-rail {
         compatible = "zmk,pm-gpio-rail";
         enable-gpios = <&gpio0 13 GPIO_ACTIVE_HIGH>;
@@ -89,7 +56,6 @@
         reg = <0>;
         spi-max-frequency = <4000000>;
 
-        /* Leeloo v2.1/rev3 has 29 RGB LEDs per half. */
         chain-length = <29>;
         spi-one-frame = <0x70>;
         spi-zero-frame = <0x40>;

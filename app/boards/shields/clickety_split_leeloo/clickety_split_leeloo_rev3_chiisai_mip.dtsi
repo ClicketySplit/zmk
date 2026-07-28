@@ -1,14 +1,6 @@
 /*
  * Copyright (c) 2026 Clickety Split Ltd.
  * SPDX-License-Identifier: MIT
- *
- * Leeloo v2.1/rev3 + Clickety Split Chiisai Sharp
- * memory-in-pixel display integration.
- *
- * This definition is owned by the Leeloo shield. Chiisai remains a generic
- * Pro Micro-compatible controller.
- *
- * No nice_view or nice_view_adapter shield is required.
  */
 
 #include <dt-bindings/gpio/gpio.h>
@@ -50,8 +42,10 @@
 };
 
 /*
- * SPI0 and I2C0 are alternate personalities of nRF52840 peripheral zero.
- * Disable the inherited SSD1306 device and I2C0 before using SPI0.
+ * The Leeloo base definition retains its historical SSD1306 OLED on
+ * pro_micro_i2c for rev1 compatibility. The rev2 Chiisai integration uses
+ * that peripheral as SPI0 for the MIP LCD, so both the inherited
+ * OLED child and I2C0 bus must be disabled.
  */
 &oled {
     status = "disabled";
@@ -69,10 +63,6 @@
     pinctrl-1 = <&leeloo_rev3_chiisai_spi0_sleep>;
     pinctrl-names = "default", "sleep";
 
-    /*
-     * Leeloo routes Sharp display chip select to Pro Micro D4.
-     * Chiisai maps D4 to P1.14.
-     */
     cs-gpios = <&pro_micro 4 GPIO_ACTIVE_HIGH>;
 
     leeloo_rev3_chiisai_mip: ls0xx@0 {

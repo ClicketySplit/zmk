@@ -52,10 +52,8 @@
     compatible = "nordic,nrf-spim";
     status = "okay";
 
-    pinctrl-0 =
-        <&clickety_split_leeloo_micro_rev2_chiisai_spi0_default>;
-    pinctrl-1 =
-        <&clickety_split_leeloo_micro_rev2_chiisai_spi0_sleep>;
+    pinctrl-0 = <&clickety_split_leeloo_micro_rev2_chiisai_spi0_default>;
+    pinctrl-1 = <&clickety_split_leeloo_micro_rev2_chiisai_spi0_sleep>;
     pinctrl-names = "default", "sleep";
 
     cs-gpios = <&pro_micro 4 GPIO_ACTIVE_HIGH>;

@@ -8,16 +8,18 @@
 #include <dt-bindings/zmk/keys.h>
 #include <dt-bindings/zmk/bt.h>
 
+#define BOOTLDR     &bootloader
+#define SYSRSET     &sys_reset
+
+
 /*
  * Assign the cs-gpios pin to 4.
- * Uncomment these next few lines if implementing nice!view Displays
- * A wire from the nice!view CS display needs to be connected to the
- * High Frequency P0.22, also known as D4 if you choose to refer to
- * the pins with Arduino Labels.
+ * Uncomment these next few lines if implementing MIP Displays.
  */
 //nice_view_spi: &spi0 {
 //  cs-gpios = <&pro_micro 4 GPIO_ACTIVE_HIGH>;
 //};
+
 
 / {
 
@@ -54,7 +56,7 @@
             display-name = " Raise";
             bindings = <
 &trans     &trans     &trans     &trans     &trans     &trans                           &bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_SEL 4  &trans
-&trans     &trans     &trans     &trans     &trans     &trans                           &trans        &trans        &trans        &trans        &sys_reset    &bootloader
+&trans     &trans     &trans     &trans     &trans     &trans                           &trans        &trans        &trans        &trans        SYSRSET       BOOTLDR
 &trans     &trans     &trans     &trans     &trans     &trans                           &trans        &trans        &trans        &trans        &trans        &trans
 &trans     &trans     &trans     &trans     &trans     &trans     &trans     &trans     &trans        &trans        &trans        &trans        &trans        &trans
                                  &trans     &trans     &trans     &trans     &trans     &trans        &bt BT_CLR    &trans

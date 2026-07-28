@@ -48,7 +48,7 @@ firmware to each half:
 - The current Chiisai RGB configuration requires the documented hardware
   connection described in the matching build guide.
 - Leeloo-Micro Rev2 with Chiisai is physically validated, including direct
-  displays, RGB operation, and production sleep and wake behaviour.
+  displays, RGB operation, sleep and wake behaviour.
 
 ## More Information
 
