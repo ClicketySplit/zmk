@@ -6,5 +6,5 @@ arch: arm
 outputs:
   - usb
   - ble
-url: https://clicketysplit.ca
+url: https://clicketysplit.ca/pages/firmware-builds-chiisai
 exposes: [pro_micro]

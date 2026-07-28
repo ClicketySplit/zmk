@@ -13,7 +13,7 @@ CONFIG_GPIO=y
 CONFIG_USE_DT_CODE_PARTITION=y
 CONFIG_BUILD_OUTPUT_UF2=y
 
-# Preserve the proven Chiisai RC low-frequency clock configuration
+# Chiisai RC low-frequency clock configuration
 CONFIG_CLOCK_CONTROL_NRF=y
 CONFIG_CLOCK_CONTROL_NRF_K32SRC_RC=y
 CONFIG_CLOCK_CONTROL_NRF_K32SRC_250PPM=y

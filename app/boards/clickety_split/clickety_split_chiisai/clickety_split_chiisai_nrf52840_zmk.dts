@@ -13,10 +13,6 @@
         zmk,battery = &vbatt;
     };
 
-    /*
-     * Preserve the historical node name because ZMK external-power
-     * settings are stored using the device name.
-     */
     EXT_POWER {
         compatible = "zmk,ext-power-generic";
         control-gpios = <&gpio0 6 GPIO_ACTIVE_HIGH>;
