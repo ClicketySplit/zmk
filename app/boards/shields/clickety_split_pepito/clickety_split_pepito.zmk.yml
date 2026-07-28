@@ -2,7 +2,7 @@ file_format: "1"
 id: clickety_split_pepito
 name: Pepito
 type: shield
-url: https://clicketysplit.ca/pages/pepito
+url: https://clicketysplit.ca/pages/firmware-builds-pepito
 requires: [seeed_xiao]
 features:
   - keys

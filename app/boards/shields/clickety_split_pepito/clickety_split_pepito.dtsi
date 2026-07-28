@@ -1,20 +1,6 @@
 /*
- * Copyright (c) 2024-2026 The ZMK Contributors
+ * Copyright (c) 2024 The ZMK Contributors
  * SPDX-License-Identifier: MIT
- *
- * Clickety Split Pepito v1.13
- *
- * Pepito uses the XIAO SPI bus for:
- *
- *   reg 0: 74HC595-compatible GPIO matrix expander
- *   reg 1: Sharp LS011B7DH03-compatible 160 x 68 Memory LCD
- *
- * The ZMK 4.1 xiao_ble//zmk board supplies the SPI2 pinctrl definition:
- *
- *   SCK  = P1.13 / XIAO D8
- *   MOSI = P1.15 / XIAO D10
- *
- * Pepito does not require a shield-owned pinctrl override.
  */
 
 #include <dt-bindings/gpio/gpio.h>
@@ -31,10 +17,6 @@
 &xiao_spi {
     status = "okay";
 
-    /*
-     * SPI register 0: shift register on XIAO D7, active-low CS.
-     * SPI register 1: Sharp display on XIAO D6, active-high CS.
-     */
     cs-gpios =
         <&xiao_d 7 GPIO_ACTIVE_LOW>,
         <&xiao_d 6 GPIO_ACTIVE_HIGH>;
@@ -61,10 +43,6 @@
         width = <160>;
         height = <68>;
 
-        /*
-         * Pepito does not supply an application-controlled EXTCOMIN
-         * signal. Perform VCOM inversion through the serial protocol.
-         */
         serial-vcom-inversion;
         serial-vcom-interval = <33>;
     };
