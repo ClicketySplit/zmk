@@ -7,6 +7,7 @@
 #include <nordic/nrf52840_qiaa.dtsi>
 #include <zephyr/dt-bindings/regulator/nrf5x.h>
 #include <dt-bindings/zmk/matrix_transform.h>
+#include "clickety_split_mnml_3x6-layouts.dtsi"
 
 / {
     model = "Clickety Split Ltd | MNML v2.13";
@@ -23,7 +24,7 @@
         zmk,battery = &max17048;
 
         zmk,kscan = &kscan0;
-        zmk,matrix-transform = &default_transform;
+        zmk,physical-layout = &mnml_3x6_layout;
     };
 
     default_transform: keymap_transform_0 {
@@ -57,6 +58,10 @@
     };
 };
 
+
+&mnml_3x6_layout {
+    transform = <&default_transform>;
+};
 
 /* I2C bus for MAX17048 Fuel Gauge */
 &pinctrl {

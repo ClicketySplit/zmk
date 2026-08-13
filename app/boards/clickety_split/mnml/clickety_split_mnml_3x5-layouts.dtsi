@@ -1,0 +1,81 @@
+/*
+ * Copyright (c) 2025 Clickety Split Ltd.
+ * SPDX-License-Identifier: MIT
+ */
+
+#include <physical_layouts.dtsi>
+
+/ {
+    mnml_3x5_layout: mnml_3x5_layout {
+        compatible = "zmk,physical-layout";
+        display-name = "MNML 3x5";
+
+        /*
+         * Physical geometry derived from the STEP-measured MNML 3x6 layout
+         * with the outer three-key column removed from each half.
+         *
+         * Units:
+         *   w, h, x, y: centi-keyunits (100 = 1U)
+         *   rot:         centidegrees
+         *
+         * The two halves use a fixed 30 mm visual separation for Studio
+         * rendering. This is not a physical constraint on the split keyboard.
+         *
+         * Keys are listed in the same order as default_transform.
+         */
+        keys  //                     w   h     x    y      rot    rx    ry
+
+            // Row 0
+            = <&key_physical_attrs 100 100     0   21        0     0     0>
+            , <&key_physical_attrs 100 100   100    8        0     0     0>
+            , <&key_physical_attrs 100 100   200    0        0     0     0>
+            , <&key_physical_attrs 100 100   300    8        0     0     0>
+            , <&key_physical_attrs 100 100   400   17        0     0     0>
+
+            , <&key_physical_attrs 100 100   900   17        0     0     0>
+            , <&key_physical_attrs 100 100  1000    8        0     0     0>
+            , <&key_physical_attrs 100 100  1100    0        0     0     0>
+            , <&key_physical_attrs 100 100  1200    8        0     0     0>
+            , <&key_physical_attrs 100 100  1300   21        0     0     0>
+
+            // Row 1
+            , <&key_physical_attrs 100 100     0  121        0     0     0>
+            , <&key_physical_attrs 100 100   100  108        0     0     0>
+            , <&key_physical_attrs 100 100   200  100        0     0     0>
+            , <&key_physical_attrs 100 100   300  108        0     0     0>
+            , <&key_physical_attrs 100 100   400  117        0     0     0>
+
+            , <&key_physical_attrs 100 100   900  117        0     0     0>
+            , <&key_physical_attrs 100 100  1000  108        0     0     0>
+            , <&key_physical_attrs 100 100  1100  100        0     0     0>
+            , <&key_physical_attrs 100 100  1200  108        0     0     0>
+            , <&key_physical_attrs 100 100  1300  121        0     0     0>
+
+            // Row 2, including inner key on each half
+            , <&key_physical_attrs 100 100     0  221        0     0     0>
+            , <&key_physical_attrs 100 100   100  208        0     0     0>
+            , <&key_physical_attrs 100 100   200  200        0     0     0>
+            , <&key_physical_attrs 100 100   300  208        0     0     0>
+            , <&key_physical_attrs 100 100   400  217        0     0     0>
+            , <&key_physical_attrs 100 100   517  233        0     0     0>
+
+            , <&key_physical_attrs 100 100   783  233        0     0     0>
+            , <&key_physical_attrs 100 100   900  217        0     0     0>
+            , <&key_physical_attrs 100 100  1000  208        0     0     0>
+            , <&key_physical_attrs 100 100  1100  200        0     0     0>
+            , <&key_physical_attrs 100 100  1200  208        0     0     0>
+            , <&key_physical_attrs 100 100  1300  221        0     0     0>
+
+            // Modifier / thumb row
+            , <&key_physical_attrs 100 100   176  329   (-500)   226   379>
+            , <&key_physical_attrs 100 100   281  324         0     0     0>
+            , <&key_physical_attrs 100 100   389  334      1000   439   384>
+            , <&key_physical_attrs 100 100   495  362      2000   545   412>
+
+            , <&key_physical_attrs 100 100   805  362   (-2000)   855   412>
+            , <&key_physical_attrs 100 100   911  334   (-1000)   961   384>
+            , <&key_physical_attrs 100 100  1019  324         0     0     0>
+            , <&key_physical_attrs 100 100  1124  329       500  1174   379>
+            ;
+    };
+};
