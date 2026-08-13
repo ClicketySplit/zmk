@@ -89,15 +89,15 @@
             , <&key_physical_attrs 100 100  1500  321        0     0     0>
 
             // Modifier / thumb row
-            , <&key_physical_attrs 100 100   276  429      500   326   479>
-            , <&key_physical_attrs 100 100   381  424        0     0     0>
-            , <&key_physical_attrs 100 100   489  434  (-1000)   539   484>
-            , <&key_physical_attrs 100 100   595  462  (-2000)   645   512>
+            , <&key_physical_attrs 100 100   276  429   (-500)   326   479>
+            , <&key_physical_attrs 100 100   381  424         0     0     0>
+            , <&key_physical_attrs 100 100   489  434      1000   539   484>
+            , <&key_physical_attrs 100 100   595  462      2000   645   512>
 
-            , <&key_physical_attrs 100 100   905  462     2000   955   512>
-            , <&key_physical_attrs 100 100  1011  434     1000  1061   484>
-            , <&key_physical_attrs 100 100  1119  424        0     0     0>
-            , <&key_physical_attrs 100 100  1224  429   (-500)  1274   479>
+            , <&key_physical_attrs 100 100   905  462   (-2000)   955   512>
+            , <&key_physical_attrs 100 100  1011  434   (-1000)  1061   484>
+            , <&key_physical_attrs 100 100  1119  424         0     0     0>
+            , <&key_physical_attrs 100 100  1224  429       500  1274   479>
             ;
     };
 };
