@@ -32,6 +32,7 @@
 
 #define BOOTLDR     &bootloader
 #define SYSRESET    &sys_reset
+#define STUDIO      &studio_unlock
 
 #define VOLUP       C_VOL_UP
 #define VOLDN       C_VOL_DN
@@ -251,7 +252,7 @@
             display-name = " BLE";
             bindings = <
                 &none      &bt BT0    &bt BT1     &bt BT2    &bt BT3    &bt BT4                          &bt BT0    &bt BT1    &bt BT2    &bt BT3     &bt BT4   &none
-                &none      BOOTLDR    SYSRESET    &none      &none      &none                            &none      &none      &none      SYSRESET    BOOTLDR   &none
+                &none      BOOTLDR    SYSRESET    STUDIO     &none      &none                            &none      &none      STUDIO     SYSRESET    BOOTLDR   &none
                 &none      &none      &none       &none      &none      &none      &trans     &trans     &none      &none      &none      &none       &none     &none
                 &none      &none      &bt BT_CLR  &none      &none      &none      &trans     &trans     &none      &none      &none      &bt BT_CLR  &none     &none
                                                   &trans     &trans     &trans     &trans     &trans     &trans     &trans     &trans
