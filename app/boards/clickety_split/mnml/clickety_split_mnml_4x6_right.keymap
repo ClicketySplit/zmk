@@ -1,0 +1,9 @@
+/*
+ * Copyright (c) 2025 Clickety Split Ltd.
+ * SPDX-License-Identifier: MIT
+ *
+ * HWMv2 board-specific keymap entry point.
+ * The shared MNML 4x6 keymap remains the authoritative definition.
+ */
+
+#include "clickety_split_mnml_4x6.keymap"

@@ -1,0 +1,262 @@
+/*
+ * Copyright (c) 2025 Clickety Split Ltd.
+ * SPDX-License-Identifier: MIT
+ */
+
+#include <behaviors.dtsi>
+#include <dt-bindings/zmk/outputs.h>
+#include <dt-bindings/zmk/keys.h>
+#include <dt-bindings/zmk/bt.h>
+
+// Layers
+#define QW_M        4 // Main
+#define QW_L        5 // Lower
+#define QW_R        6 // Raise
+#define QW_A        7 // Adjust
+
+#define QX_M        0 // Main
+#define QX_L        1 // Lower
+#define QX_R        2 // Raise
+#define QX_A        3 // Adjust
+
+#define QC_N        8 // Number Pad
+#define QC_F        9 // Firmware
+
+
+// Short versions
+#define WIN_SC      LG(LS(S))
+#define OSX_SC      LG(LS(N4))
+
+#define enDSH_X     LA(MINUS)
+#define emDSH_X     LS(LA(MINUS))
+
+#define BOOTLDR     &bootloader
+#define SYSRESET    &sys_reset
+
+#define VOLUP       C_VOL_UP
+#define VOLDN       C_VOL_DN
+#define VOLMT       C_MUTE
+
+#define LOCK_W      LG(L)
+#define LOCK_X      LC(LG(Q))
+
+#define BT0         BT_SEL 0
+#define BT1         BT_SEL 1
+#define BT2         BT_SEL 2
+#define BT3         BT_SEL 3
+#define BT4         BT_SEL 4
+
+
+/ {
+    conditional_layers {
+        compatible = "zmk,conditional-layers";
+        adjust_win_layer {
+            if-layers = <QW_L QW_R>;
+            then-layer = <QW_A>;
+        };
+
+        adjust_osx_layer {
+            if-layers = <QX_L QX_R>;
+            then-layer = <QX_A>;
+        };
+    };
+
+    macros {
+        enDSH_W: en_Dash {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            wait-ms = <20>;
+            tap-ms = <20>;
+            bindings
+                = <&macro_press   &kp LALT>
+                , <&macro_tap     &kp KP_N0 &kp KP_N1 &kp KP_N5 &kp KP_N0>
+                , <&macro_release &kp LALT>
+                ;
+        };
+
+        emDSH_W: em_Dash {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            wait-ms = <20>;
+            tap-ms = <20>;
+            bindings
+                = <&macro_press   &kp LALT>
+                , <&macro_tap     &kp KP_N0 &kp KP_N1 &kp KP_N5 &kp KP_N1>
+                , <&macro_release &kp LALT>
+                ;
+        };
+    };
+
+    behaviors {
+        tdw_Q: tap_dance_0 {
+            compatible = "zmk,behavior-tap-dance";
+            #binding-cells = <0>;
+            tapping-term-ms = <200>;
+            bindings = <&kp Q>, <&kp LA(F4)>;
+        };
+
+        tdx_Q: tap_dance_1 {
+            compatible = "zmk,behavior-tap-dance";
+            #binding-cells = <0>;
+            tapping-term-ms = <200>;
+            bindings = <&kp Q>, <&kp LG(Q)>;
+        };
+
+        tdw_LRP: tap_dance_2 {
+            compatible = "zmk,behavior-tap-dance";
+            #binding-cells = <0>;
+            tapping-term-ms = <200>;
+            bindings = <&kp LPAR>, <&kp RPAR>;
+        };
+
+        tdx_LRB: tap_dance_3 {
+            compatible = "zmk,behavior-tap-dance";
+            #binding-cells = <0>;
+            tapping-term-ms = <200>;
+            bindings = <&kp LBKT>, <&kp RBKT>;
+        };
+
+        tdx_LRR: tap_dance_4 {
+            compatible = "zmk,behavior-tap-dance";
+            #binding-cells = <0>;
+            tapping-term-ms = <200>;
+            bindings = <&kp LBRC>, <&kp RBRC>;
+        };
+
+        tdx_LRA: tap_dance_5 {
+            compatible = "zmk,behavior-tap-dance";
+            #binding-cells = <0>;
+            tapping-term-ms = <200>;
+            bindings = <&kp LT>, <&kp GT>;
+        };
+
+        tdx_BOL: tap_dance_6 {
+            compatible = "zmk,behavior-tap-dance";
+            #binding-cells = <0>;
+            tapping-term-ms = <200>;
+            bindings = <&kp LG(LEFT)>, <&kp HOME>;
+        };
+
+        tdx_EOL: tap_dance_7 {
+            compatible = "zmk,behavior-tap-dance";
+            #binding-cells = <0>;
+            tapping-term-ms = <200>;
+            bindings = <&kp LG(RIGHT)>, <&kp END>;
+        };
+    };
+
+    keymap {
+        compatible = "zmk,keymap";
+
+        default_osx_layer {
+            display-name = " OSX";
+            bindings = <
+                &kp ESC    &kp N1     &kp N2     &kp N3     &kp N4     &kp N5                           &kp N6     &kp N7     &kp N8     &kp N9     &kp N0       &kp BSPC
+                &kp TAB    &tdx_Q     &kp W      &kp E      &kp R      &kp T                            &kp Y      &kp U      &kp I      &kp O      &kp P        &kp BSLH
+                &kp CAPS   &kp A      &kp S      &kp D      &kp F      &kp G     &mo QC_F    &kp LALT   &kp H      &kp J      &kp K      &kp L      &kp SEMI     &kp QUOT
+                &kp LSHFT  &kp Z      &kp X      &kp C      &kp V      &kp B     &mo QC_N    &kp LCTRL  &kp N      &kp M      &kp COMMA  &kp DOT    &kp FSLH     &kp RSHFT
+                                             &kp LALT   &kp LGUI   &lt 1 RET  &lt 2 MINUS    &lt 2 EQUAL  &lt 1 SPACE  &kp BSPC   &mo QC_F
+            >;
+        };
+
+        lower_osx_layer {
+            display-name = " Lower";
+            bindings = <
+                &trans     &trans     &trans     &trans     &trans     &trans                           &trans      &trans      &trans     &trans     &trans     &trans
+                &trans     &none      &none      &none      &none      &none                            &none       &none       &none      &none      &none      &trans
+                &trans     &tdx_LRA   &tdw_LRP   &tdx_LRB   &tdx_LRR   &none      &trans     &trans     &none       &none       &none      &none      &none      &trans
+                &trans     &none      &none      &none      &none      &none      &trans     &trans     &kp enDSH_X &kp emDSH_X &none      &none      &none      &trans
+                                                 &trans     &trans     &trans     &trans     &trans     &trans      &trans      &trans
+            >;
+        };
+
+        raise_osx_layer {
+            display-name = " Raise";
+            bindings = <
+                &trans     &trans     &trans     &trans     &kp OSX_SC &trans                           &trans      &trans      &trans     &trans     &trans     &trans
+                &trans     &none      &none      &none      &none      &none                            &kp PG_UP   &tdx_BOL    &kp UP     &tdx_EOL   &none      &kp BSLH
+                &trans     &none      &none      &none      &none      &none      &trans     &trans     &kp PG_DN   &kp LEFT    &kp DOWN   &kp RIGHT  &none      &kp GRAVE
+                &trans     &none      &none      &none      &none      &none      &trans     &trans     &none       &none       &none      &none      &kp TILDE  &trans
+                                                 &trans     &trans     &trans     &trans     &trans     &trans      &kp DEL     &trans
+            >;
+        };
+
+        adjust_osx_layer {
+            display-name = " Adjust";
+            bindings = <
+                &trans     &none      &none      &none      &none      &none                            &none      &none      &none       &none       &none    &none
+                &trans     &kp F1     &kp F2     &kp F3     &kp F4     &kp F5                           &none      &none      &kp VOLUP   &none       &none    &none
+                &trans     &kp F6     &kp F7     &kp F8     &kp F9     &kp F10    &trans     &trans     &none      &none      &kp VOLDN   &kp LOCK_X  &none    &none
+                &trans     &kp F11    &kp F12    &none      &none      &none      &trans     &trans     &none      &kp VOLMT  &none       &none       &none    &none
+                                                 &trans     &trans     &trans     &trans     &trans     &trans     &trans     &tog QW_M
+            >;
+        };
+
+        default_win_layer {
+            display-name = " Win 11";
+            bindings = <
+                &kp ESC    &kp N1     &kp N2     &kp N3     &kp N4     &kp N5                           &kp N6     &kp N7     &kp N8     &kp N9     &kp N0     &kp BSPC
+                &kp TAB    &tdw_Q     &kp W      &kp E      &kp R      &kp T                            &kp Y      &kp U      &kp I      &kp O      &kp P      &kp BSLH
+                &kp CAPS   &kp A      &kp S      &kp D      &kp F      &kp G     &mo QC_F    &kp LALT   &kp H      &kp J      &kp K      &kp L      &kp SEMI   &kp QUOT
+                &kp LSHFT  &kp Z      &kp X      &kp C      &kp V      &kp B     &mo QC_N    &kp RGUI   &kp N      &kp M      &kp COMMA  &kp DOT    &kp FSLH   &kp RSHFT
+                                             &kp LALT   &kp LCTRL  &lt 5 RET  &lt 6 MINUS    &lt 6 EQUAL  &lt 5 SPACE  &kp BSPC   &mo QC_F
+            >;
+        };
+
+        lower_win_layer {
+            display-name = " Lower";
+            bindings = <
+                &trans     &trans     &trans     &trans     &trans     &trans                           &trans     &trans     &trans     &trans     &trans     &trans
+                &trans     &none      &none      &none      &none      &none                            &none      &none      &none      &none      &none      &trans
+                &trans     &tdx_LRA   &tdw_LRP   &tdx_LRB   &tdx_LRR   &none      &trans     &trans     &none      &none      &none      &none      &none      &trans
+                &trans     &none      &none      &none      &none      &none      &trans     &trans     &enDSH_W   &emDSH_W   &none      &none      &none      &trans
+                                                 &trans     &trans     &trans     &trans     &trans     &trans     &trans     &trans
+            >;
+        };
+
+        raise_win_layer {
+            display-name = " Raise";
+            bindings = <
+                &trans     &trans     &trans     &trans     &kp WIN_SC &trans                           &trans     &trans     &trans     &trans     &trans     &trans
+                &trans     &none      &none      &none      &none      &none                            &kp PG_UP  &kp HOME   &kp UP     &kp END    &none      &kp BSLH
+                &trans     &none      &none      &none      &none      &none      &trans     &trans     &kp PG_DN  &kp LEFT   &kp DOWN   &kp RIGHT  &none      &kp GRAVE
+                &trans     &none      &none      &none      &none      &none      &trans     &trans     &none      &none      &none      &none      &kp TILDE  &trans
+                                                 &trans     &trans     &trans     &trans     &trans     &trans     &kp DEL    &trans
+            >;
+        };
+
+        adjust_win_layer {
+            display-name = " Adjust";
+            bindings = <
+                &trans     &none      &none      &none      &none      &none                            &none      &none      &none      &none       &none      &none
+                &trans     &kp F1     &kp F2     &kp F3     &kp F4     &kp F5                           &none      &none      &kp VOLUP  &none       &none      &none
+                &trans     &kp F6     &kp F7     &kp F8     &kp F9     &kp F10    &trans     &trans     &none      &none      &kp VOLDN  &kp LOCK_W  &none      &none
+                &trans     &kp F11    &kp F12    &none      &none      &none      &trans     &trans     &none      &kp VOLMT  &none      &none       &none      &none
+                                                 &trans     &trans     &trans     &trans     &trans     &trans     &trans     &tog QW_M
+            >;
+        };
+
+        numpad_layer {
+            display-name = " NPad";
+            bindings = <
+                &trans     &none      &none      &none      &none      &none                            &none      &none      &none      &none      &none       &none
+                &trans     &none      &none      &none      &none      &none                            &kp SLASH  &kp N7     &kp N8     &kp N9     &kp MINUS   &none
+                &trans     &none      &none      &none      &none      &none      &trans     &trans     &kp ASTRK  &kp N4     &kp N5     &kp N6     &kp PLUS    &none
+                &trans     &none      &none      &none      &none      &none      &trans     &trans     &none      &kp N1     &kp N2     &kp N3     &kp EQUAL   &none
+                                                 &trans     &trans     &trans     &trans     &trans     &kp N0     &kp DOT    &none
+            >;
+        };
+
+        ble_layer {
+            display-name = " BLE";
+            bindings = <
+                &none      &bt BT0    &bt BT1     &bt BT2    &bt BT3    &bt BT4                          &bt BT0    &bt BT1    &bt BT2    &bt BT3     &bt BT4   &none
+                &none      BOOTLDR    SYSRESET    &none      &none      &none                            &none      &none      &none      SYSRESET    BOOTLDR   &none
+                &none      &none      &none       &none      &none      &none      &trans     &trans     &none      &none      &none      &none       &none     &none
+                &none      &none      &bt BT_CLR  &none      &none      &none      &trans     &trans     &none      &none      &none      &bt BT_CLR  &none     &none
+                                                  &trans     &trans     &trans     &trans     &trans     &trans     &trans     &trans
+            >;
+        };
+
+    };
+};
